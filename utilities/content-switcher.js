@@ -1,0 +1,1 @@
+const $mainContent = $("#main-wrapper");
