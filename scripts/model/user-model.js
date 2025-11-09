@@ -5,10 +5,25 @@ const saveUser = (username, email, password) => {
   userDB.push(new User(username, email, password));
 };
 
-const deleteUser = (index) => userDB.splice(index, 1);
+const deleteUser = (i) => userDB.splice(i, 1);
 
 const getUsers = () => userDB;
 
-const getUserByIndex = (index) => userDB[index];
+const getUserByIndex = (i) => userDB[i];
 
-export { saveUser, deleteUser, getUsers, getUserByIndex };
+const getUserByUsername = (username) => {
+  return getUsers().find((u) => u.username === username);
+};
+
+const getUserCodeByUsername = (u) => {
+  return u.code;
+};
+
+export {
+  saveUser,
+  deleteUser,
+  getUsers,
+  getUserByIndex,
+  getUserByUsername,
+  getUserCodeByUsername,
+};

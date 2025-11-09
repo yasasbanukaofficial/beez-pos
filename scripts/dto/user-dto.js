@@ -3,12 +3,14 @@ export class UserDTO {
   #username;
   #email;
   #password;
+  #code;
 
   // Constructor
-  constructor(username, email, password) {
+  constructor(username, email, password, code) {
     this.#username = username;
     this.#email = email;
     this.#password = password;
+    this.#code = code;
   }
 
   // Getters and Setters
@@ -34,5 +36,13 @@ export class UserDTO {
 
   set password(password) {
     this.#password = password;
+  }
+
+  get code() {
+    return this.#code;
+  }
+
+  set code(code) {
+    this.#code = code;
   }
 }

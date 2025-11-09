@@ -2,12 +2,17 @@ export default class PinInputDTO {
   #pinCode;
   #maxLength;
   #dots;
+  #onSubmitCallback;
 
   constructor(dotSelector, maxLength = 4) {
     this.#pinCode = "";
     this.#maxLength = maxLength;
     this.#dots = $(dotSelector);
     this.init();
+  }
+
+  onSubmit(callback) {
+    this.#onSubmitCallback = callback;
   }
 
   init() {
@@ -38,8 +43,15 @@ export default class PinInputDTO {
     this.updateDots();
   }
 
+  clear() {
+    this.#pinCode = "";
+    this.updateDots();
+  }
+
   submit() {
-    console.log("PIN submitted:", this.#pinCode);
+    if (this.#onSubmitCallback) {
+      this.#onSubmitCallback(this.#pinCode);
+    }
   }
 
   updateDots() {
