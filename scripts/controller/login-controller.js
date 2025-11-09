@@ -86,22 +86,23 @@ $(document).on("click", ".user-card-btn", function () {
   username = $(this).data("username");
 });
 
-$(document).on("keydown", function (e) {
-  const key = e.key;
+$(document).on("shown.bs.modal", "#pinModal", function () {
+  $(document).on("keydown", function (e) {
+    const key = e.key;
 
-  const $btn = $(".key").filter(function () {
-    return (
-      $(this).data("digit") == key ||
-      (key === "Backspace" && $(this).data("digit") === "<-") ||
-      (key === "Enter" && $(this).data("digit") === "->")
-    );
+    const $btn = $(".key").filter(function () {
+      return (
+        $(this).data("digit") == key ||
+        (key === "Backspace" && $(this).data("digit") === "<-") ||
+        (key === "Enter" && $(this).data("digit") === "->")
+      );
+    });
+
+    if ($btn.length) {
+      $btn.click();
+    }
   });
-
-  if ($btn.length) {
-    $btn.click();
-  }
 });
-
 // Primary Handlers and functions
 function handlePinEntry() {
   if (pinInput) pinInput.clear();
