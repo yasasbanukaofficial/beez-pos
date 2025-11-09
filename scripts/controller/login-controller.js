@@ -20,18 +20,51 @@ $(function () {
           .map(
             (user) =>
               `<button
-                class="btn btn-dark rounded-3 w-100 d-flex align-items-center gap-4 px-4 py-3 user-card-btn"
-                data-username='${user.username}'
-                data-bs-toggle="modal" data-bs-target="#pinModal"
-                >
-                    <p
-                        class="rounded-circle text-dark text-center align-content-center fs-1"
-                        style="background-color: #f0c8cf; width: 5rem; height: 5rem"
+                class="btn btn-dark d-flex align-items-center gap-4 p-0 user-card-btn"
+                style="border-radius: 2rem;"
+                data-username="${user.username}"
+                data-bs-toggle="modal"
+                data-bs-target="#pinModal"
+              >
+                <div class="shadow bg-dark" style="width: 18rem; border-radius: 2rem;">
+                  <!-- Top Graphical Area -->
+                  <div
+                    class="position-relative rounded-top-4 overflow-hidden"
+                    style="height: 150px; border-radius: 2rem;"
+                  >
+                    <div
+                      class="position-absolute rounded-circle"
+                      style="background-color: #CFDDDB; width: 120px; height: 120px; top: -30px; left: -30px"
+                    ></div>
+                    <div
+                      class="position-absolute rounded-circle opacity-75"
+                      style="background-color: #E4CDED; width: 100px; height: 100px; bottom: -20px; right: -20px"
+                    ></div>
+                    <div
+                      class="position-absolute rounded-circle opacity-75"
+                      style="background-color: #C2DBE9; width: 90px; height: 90px; bottom: -20px; left: 40px"
+                    ></div>
+                    <div
+                      class="position-absolute rounded-circle opacity-75"
+                      style="background-color: #FFFFFF; width: 80px; height: 80px; top: 20px; right: 60px"
+                    ></div>
+                  </div>
+
+                  <!-- Content -->
+                  <div class="card-body text-center">
+                    <div
+                      class="mx-auto rounded-circle d-flex justify-content-center align-items-center fw-bold fs-2 mb-3"
+                      style="width: 5rem; height: 5rem; background-color: #f0c8cf;"
                     >
+                      <p>
                         ${user.username.charAt(0).toUpperCase()}
-                    </p>
-                    <p class="fs-4">${user.username}</p>
-               </button>`
+                      </p>
+                    </div>
+                    <h5 class="fw-bold text-white">${user.username}</h5>
+                    <p class="text-muted small mb-3">Cashier Account</p>
+                  </div>
+                </div>
+              </button>`
           )
           .join("")
       );
@@ -103,6 +136,7 @@ $(document).on("shown.bs.modal", "#pinModal", function () {
     }
   });
 });
+
 // Primary Handlers and functions
 function handlePinEntry() {
   if (pinInput) pinInput.clear();
