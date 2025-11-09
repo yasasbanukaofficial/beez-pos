@@ -57,3 +57,11 @@ p {
     height: 40rem;
   }
 }
+
+.dotted {
+  background-color: white;
+}
+
+.bordered {
+  border: 1px solid white;
+}
