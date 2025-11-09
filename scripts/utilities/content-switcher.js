@@ -19,12 +19,12 @@ $(function () {
                 data-bs-toggle="modal" data-bs-target="#pinModal"
                 >
                     <p
-                        class="rounded-circle text-dark text-center align-content-center fs-2"
+                        class="rounded-circle text-dark text-center align-content-center fs-1"
                         style="background-color: #f0c8cf; width: 5rem; height: 5rem"
                     >
                         ${user.username.charAt(0).toUpperCase()}
                     </p>
-                    <p class="fs-2">${user.username}</p>
+                    <p class="fs-4">${user.username}</p>
                </button>`
           )
           .join("")
@@ -49,7 +49,7 @@ const displayPinNumbers = () => {
   pinNumbers.map((number, index) => {
     if (index % 3 === 0) {
       $currentRow = $(
-        '<div class="row text-center gap-5 justify-content-center"></div>'
+        '<div class="row text-center gap-2 gap-md-5 gap-lg-5 justify-content-center"></div>'
       );
       $wrapper.append($currentRow);
     }

@@ -3,8 +3,10 @@
     class="col-12 py-4 px-5 vh-100 d-flex flex-column justify-content-between"
     id="loginWrapper"
   >
-    <div class="d-flex flex-row justify-content-between align-items-center">
-      <h4 class="fw-bold pt-1 text-white">Shift Login</h4>
+    <div
+      class="d-flex flex-column flex-lg-row justify-content-between align-items-center"
+    >
+      <h4 class="fw-bold pt-1 text-white fs-5">Shift Login</h4>
       <p class="text-muted">Monday, 6 Feb 2023 • 8.23 AM</p>
     </div>
     <!-- User Cards Wrapper -->
@@ -16,11 +18,12 @@
     </div>
   </section>
   <!-- Modal Container -->
-  <div class="modal fade" id="pinModal" tabindex="-1">
+  <div class="modal fade p-0" id="pinModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-dark text-white" style="height: 70vh">
-        <div class="modal-header border-0">
-          <h5 class="modal-title">Enter PIN</h5>
+      <div class="modal-content bg-dark text-white modal-pin">
+        <div
+          class="modal-header border-0 d-flex flex-row justify-content-start align-items-center mt-4 gap-2 ms-0 ms-md-2 ms-lg-2"
+        >
           <button
             type="button"
             class="bg-transparent border-0"
@@ -31,6 +34,7 @@
               style="color: #ffffff"
             ></i>
           </button>
+          <h5 class="modal-title fs-5 text-white fs-4 fw-bold">Enter PIN</h5>
         </div>
         <div class="modal-body mt-4">
           <!-- Dots Container -->
@@ -55,7 +59,7 @@
               style="width: 20px; height: 20px"
             ></span>
           </div>
-          <div class="d-grid gap-5" id="btnWrapper"></div>
+          <div class="d-grid gap-2 gap-md-5 gap-lg-5" id="btnWrapper"></div>
         </div>
       </div>
     </div>

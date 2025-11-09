@@ -47,3 +47,13 @@ p {
     flex-grow: 0 !important;
   }
 }
+
+.modal-pin {
+  height: 50rem;
+}
+
+@media (max-width: 768px) {
+  .modal-pin {
+    height: 40rem;
+  }
+}
