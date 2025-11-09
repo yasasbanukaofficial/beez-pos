@@ -1,4 +1,4 @@
-export default class PinInputDTO {
+export default class PinInputController {
   #pinCode;
   #maxLength;
   #dots;
