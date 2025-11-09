@@ -15,39 +15,49 @@
       // User Cards
     </div>
   </section>
-  <section
-    class="d-none col-lg-4 vh-100 d-lg-flex justify-content-center align-items-center"
-    id="pinEntryWrapper"
-  >
-    <div
-      class="d-flex flex-column justify-content-center align-items-center gap-5 rounded-3 me-2"
-      style="background-color: #292c2d; height: 95vh; width: 35vw"
-    >
-      <p class="fs-5 text-white mt-3">Enter your PIN</p>
-      <!-- Dots Container -->
-      <div class="dot-wrapper w-auto h-auto d-flex gap-4 mb-5">
-        <span
-          class="bg-white rounded-circle d-inline-block"
-          style="width: 20px; height: 20px"
-        ></span>
-        <span
-          class="border border-1 border-white rounded-circle d-inline-block"
-          style="width: 20px; height: 20px"
-        ></span
-        ><span
-          class="border border-1 border-white rounded-circle d-inline-block"
-          style="width: 20px; height: 20px"
-        ></span
-        ><span
-          class="border border-1 border-white rounded-circle d-inline-block"
-          style="width: 20px; height: 20px"
-        ></span>
+  <!-- Modal Container -->
+  <div class="modal fade" id="pinModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white" style="height: 70vh">
+        <div class="modal-header border-0">
+          <h5 class="modal-title">Enter PIN</h5>
+          <button
+            type="button"
+            class="bg-transparent border-0"
+            data-bs-dismiss="modal"
+          >
+            <i
+              class="fa-regular fa-circle-xmark fa-2xl"
+              style="color: #ffffff"
+            ></i>
+          </button>
+        </div>
+        <div class="modal-body mt-4">
+          <!-- Dots Container -->
+          <div
+            class="dot-wrapper w-auto h-auto d-flex align-items-center justify-content-center gap-4"
+            style="margin-bottom: 7vh"
+          >
+            <span
+              class="bg-white rounded-circle d-inline-block"
+              style="width: 20px; height: 20px"
+            ></span>
+            <span
+              class="border border-1 border-white rounded-circle d-inline-block"
+              style="width: 20px; height: 20px"
+            ></span
+            ><span
+              class="border border-1 border-white rounded-circle d-inline-block"
+              style="width: 20px; height: 20px"
+            ></span
+            ><span
+              class="border border-1 border-white rounded-circle d-inline-block"
+              style="width: 20px; height: 20px"
+            ></span>
+          </div>
+          <div class="d-grid gap-5" id="btnWrapper"></div>
+        </div>
       </div>
-      <!-- Button Container -->
-      <div
-        class="container-fluid d-flex flex-column gap-5"
-        id="btnWrapper"
-      ></div>
     </div>
-  </section>
+  </div>
 </div>

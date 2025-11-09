@@ -16,6 +16,7 @@ $(function () {
               `<button
                 class="btn btn-dark rounded-3 w-100 d-flex align-items-center gap-4 px-4 py-3 user-card-btn"
                 data-index=${index}
+                data-bs-toggle="modal" data-bs-target="#pinModal"
                 >
                     <p
                         class="rounded-circle text-dark text-center align-content-center fs-2"
@@ -37,16 +38,6 @@ $(function () {
   } else {
     loadContent("./dashboard.html");
   }
-  $(document).on("click", ".user-card-btn", function () {
-    const $pinEntryWrapper = $("#pinEntryWrapper");
-    const $loginWrapper = $("#loginWrapper");
-
-    if ($pinEntryWrapper.length && $loginWrapper.length) {
-      $loginWrapper.removeClass("col-12").addClass("col-8");
-
-      $pinEntryWrapper.removeClass("d-none").fadeIn(200);
-    }
-  });
 });
 
 const displayPinNumbers = () => {
