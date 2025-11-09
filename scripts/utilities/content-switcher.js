@@ -49,14 +49,14 @@ const displayPinNumbers = () => {
   pinNumbers.map((number, index) => {
     if (index % 3 === 0) {
       $currentRow = $(
-        '<div class="row text-center gap-2 gap-md-5 gap-lg-5 justify-content-center"></div>'
+        '<div class="row text-center gap-3 gap-lg-5 justify-content-center"></div>'
       );
       $wrapper.append($currentRow);
     }
     const $btn = $(
       `<button
         class="btn btn-dark border-0 fs-3 fw-bold key"
-        style="background-color: #3d4142"
+        style="background-color: #3d4142; width: 80px; height: 80px"
       >
         ${number.toString()}
       </button>`
