@@ -16,7 +16,9 @@ const loadLogin = () => {
 
 const loadDashboard = () => {
   $(leftCol).removeClass("d-none");
-  $(rightCol).removeClass("col-12").addClass("col-10");
+  $(rightCol)
+    .removeClass("col-12")
+    .addClass("col-lg-9 col-md-11 vh-100 px-3 px-lg-0");
   loadNavbar();
   loadView(rightCol, "./views/pages/dashboard.html");
 };

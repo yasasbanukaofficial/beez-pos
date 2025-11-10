@@ -35,7 +35,7 @@ p {
   border-radius: 10px;
 }
 
-@media all and (min-width: 768px) {
+@media all and (min-width: 1024px) {
   .navbar {
     height: 100vh;
   }
