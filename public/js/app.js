@@ -1,6 +1,6 @@
-import loadView from "../utils/loader.js";
-import { loadLoginContent } from "./login-controller.js";
-import { sessionController } from "./session-controller.js";
+import loadView from "../../utils/loader.js";
+import { loadLoginContent } from "../../controller/login-controller.js";
+import { sessionController } from "../../controller/session-controller.js";
 
 // Variables
 const leftCol = "#leftCol";

@@ -1,6 +1,6 @@
 import { getUsers } from "../model/user-model.js";
 import PinInputDTO from "./pin-input-controller.js";
-import { handleAuthentication } from "../controller/auth-controller.js";
+import { handleAuthentication } from "./auth-controller.js";
 import { sessionController } from "./session-controller.js";
 
 // Variables
