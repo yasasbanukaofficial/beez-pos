@@ -1,25 +1,29 @@
 import { getUsers } from "../model/user-model.js";
 import PinInputDTO from "./pin-input-controller.js";
 import { handleAuthentication } from "../controller/auth-controller.js";
+import { sessionController } from "./session-controller.js";
 
 // Variables
 const $mainContent = $("#mainWrapper");
 const pinNumbers = [7, 8, 9, 4, 5, 6, 1, 2, 3, "<-", 0, "->"];
 let pinInput;
 let username;
+let isUserLoggedIn =
+  sessionController.getSessionItem("loggedInUser") === "true";
 
 // Load User Cards
 $(function () {
-  let isUserLoggedIn = false;
+  loadContent(isUserLoggedIn ? "./views/dashboard.html" : "./views/login.html");
+});
 
-  const loadContent = (path) => {
-    $mainContent.load(path, () => {
-      let userList = getUsers();
-      $("#userCard").html(
-        userList
-          .map(
-            (user) =>
-              `<button
+const loadContent = (path) => {
+  $mainContent.load(path, () => {
+    let userList = getUsers();
+    $("#userCard").html(
+      userList
+        .map(
+          (user) =>
+            `<button
                 class="btn btn-dark d-flex align-items-center gap-4 p-0 user-card-btn"
                 style="border-radius: 2rem;"
                 data-username="${user.username}"
@@ -65,17 +69,14 @@ $(function () {
                   </div>
                 </div>
               </button>`
-          )
-          .join("")
-      );
-      displayPinNumbers();
-      handlePinEntry();
-      displayDate();
-    });
-  };
-
-  loadContent(isUserLoggedIn ? "./dashboard.html" : "./views/login.html");
-});
+        )
+        .join("")
+    );
+    displayPinNumbers();
+    handlePinEntry();
+    displayDate();
+  });
+};
 
 // Display PIN Numbers
 const displayPinNumbers = () => {
@@ -189,6 +190,7 @@ function handlePinEntry() {
     let isValid = handleAuthentication(code, username);
     if (isValid) {
       $("#pinModal").modal("hide");
+      loadContent("./views/dashboard.html");
     } else {
       pinInput.clear();
     }
