@@ -13,8 +13,11 @@
     />
     <link rel="stylesheet" href="./styles/custom.css" />
   </head>
-  <body style="background-color: #111315">
-    <main class="container-fluid" id="mainWrapper"></main>
+  <body class="container-fluid" style="background-color: #111315">
+    <main class="row" id="mainWrapper">
+      <section class="col-2 text-white d-none" id="leftCol"></section>
+      <section class="col-12" id="rightCol"></section>
+    </main>
     <!-- jQuery Scripts -->
     <script src="./assets/lib/jquery.min.js"></script>
     <!-- Bootstrap Scripts -->
@@ -25,9 +28,6 @@
     ></script>
     <!-- Font-Awesome Scripts -->
     <script src="./assets/lib/fontawesome/js/all.min.js"></script>
-    <script
-      type="module"
-      src="./scripts/controller/login-controller.js"
-    ></script>
+    <script type="module" src="./scripts/controller/app.js"></script>
   </body>
 </html>

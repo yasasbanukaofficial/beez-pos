@@ -4,26 +4,23 @@ import { handleAuthentication } from "../controller/auth-controller.js";
 import { sessionController } from "./session-controller.js";
 
 // Variables
-const $mainContent = $("#mainWrapper");
 const pinNumbers = [7, 8, 9, 4, 5, 6, 1, 2, 3, "<-", 0, "->"];
 let pinInput;
 let username;
-let isUserLoggedIn =
-  sessionController.getSessionItem("loggedInUser") === "true";
 
-// Load User Cards
-$(function () {
-  loadContent(isUserLoggedIn ? "./views/dashboard.html" : "./views/login.html");
-});
+const loadLoginContent = () => {
+  let userList = getUsers();
+  $("#userCard").empty();
+  userList.forEach((user) => {
+    $("#userCard").append(getUserCard(user));
+  });
+  displayPinNumbers();
+  handlePinEntry();
+  displayDate();
+};
 
-const loadContent = (path) => {
-  $mainContent.load(path, () => {
-    let userList = getUsers();
-    $("#userCard").html(
-      userList
-        .map(
-          (user) =>
-            `<button
+const getUserCard = (user) => {
+  return `<button
                 class="btn btn-dark d-flex align-items-center gap-4 p-0 user-card-btn"
                 style="border-radius: 2rem;"
                 data-username="${user.username}"
@@ -68,14 +65,7 @@ const loadContent = (path) => {
                     <p class="text-muted small mb-3">Cashier Account</p>
                   </div>
                 </div>
-              </button>`
-        )
-        .join("")
-    );
-    displayPinNumbers();
-    handlePinEntry();
-    displayDate();
-  });
+              </button>`;
 };
 
 // Display PIN Numbers
@@ -190,7 +180,8 @@ function handlePinEntry() {
     let isValid = handleAuthentication(code, username);
     if (isValid) {
       $("#pinModal").modal("hide");
-      loadContent("./views/dashboard.html");
+      sessionController.saveSessionItem("loggedIn", "true");
+      $(document).trigger("user:loggedIn");
     } else {
       pinInput.clear();
     }
@@ -204,3 +195,5 @@ function enableSubmit() {
     .eq(pinNumbers.length - 1)
     .prop("disabled", pinLength < 4);
 }
+
+export { loadLoginContent };
