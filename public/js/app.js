@@ -2,6 +2,10 @@ import loadView from "../../utils/loader.js";
 import { loadLoginContent } from "../../controller/login-controller.js";
 import { sessionController } from "../../controller/session-controller.js";
 import displayDate from "../../utils/date-display.js";
+import {
+  displayCategoryCard,
+  displayItemCard,
+} from "../../controller/item-controller.js";
 
 // Variables
 const leftCol = "#leftCol";
@@ -21,7 +25,11 @@ const loadDashboard = () => {
     .removeClass("col-12")
     .addClass("col-lg-10 col-12 vh-100 px-2 px-md-3 ps-lg-0");
   loadNavbar();
-  loadView(rightCol, "./views/pages/dashboard.html", displayDate);
+  loadView(rightCol, "./views/pages/item.html", () => {
+    displayDate();
+    displayCategoryCard();
+    displayItemCard();
+  });
 };
 
 const loadPage = () => {

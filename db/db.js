@@ -7,9 +7,39 @@ const userList = [
 ];
 
 const itemList = [
-  new Item("Mechanical Keyboard", "Electronics", 35, 129.99, "In Stock"),
-  new Item("Ergonomic Mouse", "Electronics", 150, 45.0, "In Stock"),
-  new Item("LED Monitor 27in", "Peripherals", 12, 299.0, "Low Stock"),
+  new Item("Mechanical Keyboard", "Accessories", 35, 129.99, "In Stock"),
+  new Item("Samsung Galaxy S25 Ultra", "Mobile", 1, 299.0, "In Stock"),
+  new Item("Lenovo Legion i7", "Laptop", 12, 299.0, "Low Stock"),
+  new Item("Mechanical Keyboard", "Accessories", 35, 129.99, "In Stock"),
+  new Item("Samsung Galaxy S25 Ultra", "Mobile", 1, 299.0, "In Stock"),
+  new Item("Lenovo Legion i7", "Laptop", 12, 299.0, "Low Stock"),
 ];
 
-export { userList, itemList };
+const categoriesList = [
+  {
+    icon: "mobile-icon",
+    categoryColor: "#cfdddb",
+    category: "Mobile",
+    cateogoryItemCount: 13,
+  },
+  {
+    icon: "laptop-icon",
+    categoryColor: "#f0c8cf",
+    category: "Laptop",
+    cateogoryItemCount: 24,
+  },
+  {
+    icon: "tablet-icon",
+    categoryColor: "#C2DBE9",
+    category: "Tablet",
+    cateogoryItemCount: 21,
+  },
+  {
+    icon: "other-icon",
+    categoryColor: "#C9CAEE",
+    category: "Accessories",
+    cateogoryItemCount: 24,
+  },
+];
+
+export { userList, itemList, categoriesList };

@@ -3,14 +3,14 @@ export class ItemDTO {
   #category;
   #itemQty;
   #itemPrice;
-  #productStatus;
+  #availability;
 
-  constructor(name, category, itemQty, itemPrice, productStatus) {
+  constructor(name, category, itemQty, itemPrice, availability) {
     this.#name = name;
     this.#category = category;
     this.#itemQty = itemQty;
     this.#itemPrice = itemPrice;
-    this.#productStatus = productStatus;
+    this.#availability = availability;
   }
 
   get name() {
@@ -45,11 +45,11 @@ export class ItemDTO {
     this.#itemPrice = itemPrice;
   }
 
-  get productStatus() {
-    return this.#productStatus;
+  get availability() {
+    return this.#availability;
   }
 
-  set productStatus(productStatus) {
-    this.#productStatus = productStatus;
+  set availability(availability) {
+    this.#availability = availability;
   }
 }

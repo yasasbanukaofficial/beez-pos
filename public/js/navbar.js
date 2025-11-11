@@ -18,6 +18,7 @@ onClick(".itemsBtn", () => {
   loadView("#rightCol", "./views/pages/item.html", () => {
     displayDate();
     displayCategoryCard();
+    displayItemCard();
   });
 });
 

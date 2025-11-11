@@ -10,7 +10,7 @@
       >
         <i class="fa-solid fa-bars fa-xl" style="color: white"></i>
       </button>
-      <h4 class="fw-bold text-white fs-4 m-0">Items</h4>
+      <h4 class="fw-bold text-white fs-4 m-0 pt-1">Items</h4>
     </div>
     <p class="text-muted d-none d-lg-inline d-md-inline" id="dateDisplay">
       Monday, 6 Feb 2023 • 8.23 AM
@@ -18,6 +18,17 @@
   </div>
   <div
     class="item-card-wrapper d-flex flex-row flex-md-row flex-lg-row gap-4 flex-grow-1 justify-content-start align-items-center px-lg-0 px-2 overflow-auto"
-    id="categoryCard"
+    id="categoryCardWrapper"
+    style="scrollbar-width: none"
   ></div>
+  <div class="px-2 px-lg-0 d-flex flex-column gap-4">
+    <div>
+      <p class="fs-5 fw-bold">All Items</p>
+    </div>
+    <div
+      class="row g-3 overflow-auto p-0"
+      id="itemCardWrapper"
+      style="max-height: 75vh"
+    ></div>
+  </div>
 </div>

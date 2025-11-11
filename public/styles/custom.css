@@ -41,6 +41,12 @@ p {
   flex-shrink: 0;
 }
 
+#itemCardWrapper > div {
+  width: clamp(10rem, 50vw, 16rem);
+  height: clamp(11rem, 18vw, 8rem);
+  flex-shrink: 0;
+}
+
 @media all and (min-width: 1024px) {
   .navbar {
     height: 100vh;
