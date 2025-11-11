@@ -35,7 +35,7 @@ p {
   border-radius: 10px;
 }
 
-#categoryCard > div {
+#categoryCardWrapper > div {
   width: clamp(8rem, 22vw, 11rem);
   height: clamp(6rem, 18vw, 8rem);
   flex-shrink: 0;
