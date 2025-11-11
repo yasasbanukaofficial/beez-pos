@@ -35,7 +35,7 @@ const displayCategoryCard = () => {
 const getCategoryCard = (category) => {
   return `
     <div
-      class="d-flex flex-column text-dark gap-5 align-items-start justify-content-center rounded-3 px-3"
+      class="d-flex flex-column text-dark gap-5 align-items-start justify-content-center rounded-3 px-3 "
       style="width: 13rem; height: 10rem; background-color: ${category.categoryColor}"
     >
       <img
