@@ -1,5 +1,5 @@
 import { UserDTO as User } from "../dto/user-dto.js";
-import { ItemDTO as Item } from "../dto.ts";
+import { ItemDTO as Item } from "../dto/item-dto.js";
 
 const userList = [
   new User("Jason Doe", "jason@mail.com", "blah", "1095"),
