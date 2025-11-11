@@ -24,7 +24,7 @@ const getCategoryCard = (category) => {
     >
       <img
         class="mt-2"
-        src="../../public/assets/media/${category.icon}.png"
+        src="./public/assets/media/${category.icon}.png"
         alt=""
       />
       <div class="mb-1">
