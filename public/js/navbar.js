@@ -1,3 +1,4 @@
+import { displayCategoryCard } from "../../controller/item-controller.js";
 import displayDate from "../../utils/date-display.js";
 import { onClick } from "../../utils/event-helper.js";
 import loadView from "../../utils/loader.js";
@@ -14,7 +15,10 @@ onClick(".customerBtn", () => {
 
 onClick(".itemsBtn", () => {
   changeBtnClasses(".itemsBtn");
-  loadView("#rightCol", "./views/pages/item.html", displayDate);
+  loadView("#rightCol", "./views/pages/item.html", () => {
+    displayDate();
+    displayCategoryCard();
+  });
 });
 
 onClick(".checkoutBtn", () => {

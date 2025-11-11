@@ -21,7 +21,7 @@ const loadDashboard = () => {
     .removeClass("col-12")
     .addClass("col-lg-10 col-12 vh-100 px-2 px-md-3 ps-lg-0");
   loadNavbar();
-  loadView(rightCol, "./views/pages/item.html", displayDate);
+  loadView(rightCol, "./views/pages/dashboard.html", displayDate);
 };
 
 const loadPage = () => {
