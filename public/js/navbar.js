@@ -1,3 +1,4 @@
+import displayDate from "../../utils/date-display.js";
 import { onClick } from "../../utils/event-helper.js";
 import loadView from "../../utils/loader.js";
 
@@ -11,9 +12,11 @@ onClick("#customerBtn", () => {
 });
 
 onClick("#itemsBtn", () => {
-  loadView("#rightCol", "./views/pages/item.html");
+  $("#dashboardBtn").removeClass("active");
+  loadView("#rightCol", "./views/pages/item.html", displayDate);
 });
 
 onClick("#checkoutBtn", () => {
+  $("#dashboardBtn").removeClass("active");
   loadView("#rightCol", "./views/pages/checkout.html");
 });
