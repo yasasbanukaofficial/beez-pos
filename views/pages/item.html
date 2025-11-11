@@ -1,12 +1,23 @@
-<div class="text-white mt-4 me-5 d-flex flex-column gap-5">
-  <div
-    class="d-flex flex-column flex-lg-row justify-content-between align-items-center"
-  >
-    <h4 class="fw-bold pt-1 text-white fs-5">Items</h4>
-    <p class="text-muted" id="dateDisplay">Monday, 6 Feb 2023 • 8.23 AM</p>
+<div class="text-white d-flex flex-column gap-5">
+  <div class="d-flex flex-row justify-content-between align-items-center pe-1">
+    <div class="d-flex flex-row align-items-center">
+      <button
+        class="btn d-lg-none border-none shadow-none p-0 pe-2 py-2"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasNav"
+        aria-controls="offcanvasNav"
+      >
+        <i class="fa-solid fa-bars fa-xl" style="color: white"></i>
+      </button>
+      <h4 class="fw-bold text-white fs-4 m-0">Items</h4>
+    </div>
+    <p class="text-muted" style="font-size: small" id="dateDisplay">
+      Monday, 6 Feb 2023 • 8.23 AM
+    </p>
   </div>
   <div
-    class="item-card-wrapper d-flex flex-column flex-md-row flex-lg-row gap-4 flex-wrap flex-grow-1 justify-content-start align-items-center"
+    class="item-card-wrapper d-flex flex-column flex-md-row flex-lg-row gap-4 flex-wrap flex-grow-1 justify-content-start align-items-center px-md-3"
     id="itemCard"
   >
     <div

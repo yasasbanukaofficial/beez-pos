@@ -1,6 +1,7 @@
 import loadView from "../../utils/loader.js";
 import { loadLoginContent } from "../../controller/login-controller.js";
 import { sessionController } from "../../controller/session-controller.js";
+import displayDate from "../../utils/date-display.js";
 
 // Variables
 const leftCol = "#leftCol";
@@ -18,9 +19,9 @@ const loadDashboard = () => {
   $(leftCol).removeClass("d-none");
   $(rightCol)
     .removeClass("col-12")
-    .addClass("col-lg-10 col-md-11 vh-100 px-3 px-lg-0");
+    .addClass("col-lg-10 col-md-12 col-12 vh-100 px-2 px-md-3");
   loadNavbar();
-  loadView(rightCol, "./views/pages/dashboard.html");
+  loadView(rightCol, "./views/pages/item.html", displayDate);
 };
 
 const loadPage = () => {

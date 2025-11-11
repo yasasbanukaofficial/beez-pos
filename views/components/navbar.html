@@ -1,84 +1,132 @@
-<div class="d-lg-inline col-lg-2 col-md-1 mb-4" id="nav-content">
-  <nav
-    class="navbar navbar-expand-lg navbar-light navbar-dark d-flex flex-column align-items-start"
+<div class="col-lg-2 col-md-12 mb-4" id="nav-content">
+  <!-- <button
+    class="btn d-lg-none mt-4 border-none shadow-none px-2"
+    type="button"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasNav"
+    aria-controls="offcanvasNav"
   >
-    <!--Navbar Logo-->
-    <div class="container p-0 m-0">
-      <div class="d-flex p-0 mt-4 mt-lg-3 justify-content-between gap-3">
-        <button
-          class="border-0 d-lg-none"
-          style="background-color: transparent"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbar"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+    <i class="fa-solid fa-bars fa-lg" style="color: white"></i>
+  </button> -->
+
+  <!-- Mobile & Tablet -->
+  <div
+    class="offcanvas offcanvas-start bg-dark text-white"
+    tabindex="-1"
+    id="offcanvasNav"
+    aria-labelledby="offcanvasNavLabel"
+  >
+    <div class="offcanvas-header mt-2 d-flex align-items-center">
+      <h5
+        class="offcanvas-title fw-bold ps-2 d-flex gap-2"
+        id="offcanvasNavLabel"
+      >
+        <img
+          src="./public/assets/media/logo.png"
+          alt="Logo"
+          style="height: 30px"
+        />
+        BeezPOS
+      </h5>
+      <i
+        class="fa-regular fa-circle-xmark fa-2xl mb-1"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+        style="color: #ffffff"
+      ></i>
+    </div>
+    <div class="offcanvas-body d-flex flex-column justify-content-between">
+      <ul class="navbar-nav d-flex flex-column ms-1 mt-3 gap-2">
+        <li class="nav-item">
+          <button
+            class="nav-link btn text-start text-white active ps-2 w-50 dashboardBtn"
+          >
+            Dashboard
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link btn text-start text-white ps-2 w-50 customerBtn"
+          >
+            Customer
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link btn text-start text-white ps-2 w-50 itemsBtn">
+            Items
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link btn text-start text-white ps-2 w-50 checkoutBtn"
+          >
+            Checkout
+          </button>
+        </li>
+      </ul>
+      <div class="mt-auto ms-2 mb-0">
+        <div
+          class="d-flex align-items-center gap-2 border border-1 border-white rounded-pill px-2 py-1"
+          style="width: 9rem"
         >
-          <!-- Hamburger Icon -->
-          <i class="fa-solid fa-bars fa-lg" style="color: #ffffff"></i>
-        </button>
-        <a
-          class="navbar-brand text-white text-decoration-none fw-bold ms-lg-4 d-none d-md-none d-lg-inline"
-          href="#"
-        >
-          <img src="./public/assets/media/logo.png" alt="Logo" />
-          BeezPOS
-        </a>
+          <p
+            class="rounded-circle text-dark text-center align-content-center"
+            style="background-color: #f0c8cf; width: 2rem; height: 2rem"
+          >
+            L
+          </p>
+          <p class="mb-0">Login User</p>
+        </div>
+        <p class="my-3 text-secondary" style="font-size: 0.75rem">
+          © BeezPOS Rights Reserved
+        </p>
       </div>
     </div>
-    <!--Navbar Links-->
+  </div>
+
+  <!-- Desktop & Higher -->
+  <nav
+    class="navbar navbar-expand-lg navbar-dark d-none d-lg-flex flex-column align-items-start vh-100"
+  >
+    <!-- Logo -->
+    <div class="container-fluid p-0 m-0">
+      <a class="navbar-brand text-white fw-bold ms-3 mt-3" href="#">
+        <img src="./public/assets/media/logo.png" alt="Logo" />
+        BeezPOS
+      </a>
+    </div>
+
+    <!-- Nav Links -->
     <div class="my-auto w-100">
-      <div class="collapse navbar-collapse" id="navbar">
-        <ul
-          class="navbar-nav d-flex flex-column w-75 ms-0 my-4 my-md-0 my-lg-0 ms-md-4 ms-lg-4 gap-2"
-        >
-          <li class="nav-item">
-            <button
-              id="dashboardBtn"
-              type="button"
-              class="nav-link btn ps-2 text-start w-75 active"
-              href="#"
-            >
-              Dashboard
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              id="customerBtn"
-              type="button"
-              class="nav-link btn ps-2 text-start w-75"
-              href="#"
-            >
-              Customer
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              id="itemsBtn"
-              type="button"
-              class="nav-link btn ps-2 text-start w-75"
-              href="#"
-            >
-              Items
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              id="checkoutBtn"
-              type="button"
-              class="nav-link btn ps-2 text-start w-75"
-              href="#"
-            >
-              Checkout
-            </button>
-          </li>
-        </ul>
-      </div>
+      <ul class="navbar-nav d-flex flex-column ms-3 gap-2">
+        <li class="nav-item">
+          <button
+            class="nav-link btn text-start text-white active pe-5 dashboardBtn"
+          >
+            Dashboard
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link btn text-start text-white pe-5 customerBtn">
+            Customer
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link btn text-start text-white pe-5 itemsBtn">
+            Items
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link btn text-start text-white pe-5 checkoutBtn">
+            Checkout
+          </button>
+        </li>
+      </ul>
     </div>
-    <div class="ms-3 d-none d d-lg-flex flex-column gap-4">
+
+    <div class="ms-3 d-flex flex-column gap-4 mb-3">
       <div
-        class="d-flex align-items-center gap-2 border border-1 border-white rounded-pill px-1 py-1 logged-user-container"
+        class="d-flex align-items-center gap-2 border border-1 border-white rounded-pill px-2 py-1"
         style="width: 9rem"
       >
         <p
@@ -87,11 +135,9 @@
         >
           L
         </p>
-        <p>Login User</p>
+        <p class="mb-0">Login User</p>
       </div>
-      <p class="mb-2" style="color: #686868; font-size: 0.75rem">
-        © BeezPOS Rights Reserved
-      </p>
+      <p class="mb-2 text-secondary" style="font-size: 0.75rem">© BeezPOS</p>
     </div>
   </nav>
 </div>
