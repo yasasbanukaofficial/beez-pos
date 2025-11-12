@@ -1,5 +1,4 @@
 <div class="text-white d-flex flex-column gap-5 pt-lg-4">
-  <!-- Header -->
   <div class="d-flex flex-row justify-content-between align-items-center pe-3">
     <div class="d-flex flex-row align-items-center">
       <button
@@ -18,23 +17,35 @@
     </p>
   </div>
 
-  <!-- Filter Tabs -->
   <div class="d-flex flex-row align-items-center gap-3 pe-3">
-    <button class="btn btn-light text-dark fw-semibold px-4 py-2 rounded-3">
+    <button
+      id="filterAll"
+      class="btn btn-light text-dark fw-semibold px-4 py-2 rounded-3"
+    >
       All
     </button>
-    <button class="btn btn-outline-secondary text-white px-4 py-2 rounded-3">
+    <button
+      id="filterInProcess"
+      class="btn btn-outline-secondary text-white px-4 py-2 rounded-3"
+    >
       In Process
     </button>
-    <button class="btn btn-outline-secondary text-white px-4 py-2 rounded-3">
+    <button
+      id="filterCompleted"
+      class="btn btn-outline-secondary text-white px-4 py-2 rounded-3"
+    >
       Completed
     </button>
-    <button class="btn btn-outline-secondary text-white px-4 py-2 rounded-3">
+    <button
+      id="filterCancelled"
+      class="btn btn-outline-secondary text-white px-4 py-2 rounded-3"
+    >
       Cancelled
     </button>
 
     <div class="ms-auto d-flex flex-row align-items-center gap-3">
       <button
+        id="addOrderBtn"
         class="btn rounded-pill fw-semibold px-4 py-2 text-dark border-0"
         style="background-color: #c9caee"
       >
@@ -46,7 +57,6 @@
           type="text"
           class="form-control bg-dark text-white rounded-3 ps-3 pe-5 py-3 border-0"
           placeholder="Search an Order"
-          aria-label="Search an Order"
           id="searchOrderInput"
         />
         <button
@@ -55,213 +65,14 @@
         >
           <i
             class="fa-solid fa-magnifying-glass px-2"
-            style="background-color: transparent; color: #3d4142"
+            style="color: #3d4142"
           ></i>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Order Cards -->
-  <div class="row g-4 pe-lg-4" id="orderCardWrapper">
-    <!-- Order Card 01 (Paid) -->
-    <div class="col-md-6 col-lg-4">
-      <div
-        class="card bg-dark border-0 text-white rounded-3 shadow-sm p-3"
-        style="background-color: #1b1d1e"
-      >
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="fw-bold fs-5">01</span>
-          <span
-            class="px-3 py-1 rounded-3 small fw-semibold"
-            style="background-color: #c9e6c2; color: #111"
-            >✓ Paid</span
-          >
-        </div>
-        <p class="fw-semibold mb-0">Yasas Banuka</p>
-        <p class="text-muted small mb-3">Tech Purchase</p>
-        <p class="small mb-1 text-muted">Wednesday, 28, 2025 • 4:48 PM</p>
-
-        <table class="table table-dark table-borderless mb-0">
-          <thead class="small text-muted">
-            <tr>
-              <th>Qty</th>
-              <th>Items</th>
-              <th class="text-end">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>01</td>
-              <td>Macbook Air</td>
-              <td class="text-end">$600</td>
-            </tr>
-            <tr>
-              <td>01</td>
-              <td>iPhone 17 Max</td>
-              <td class="text-end">$120</td>
-            </tr>
-          </tbody>
-        </table>
-        <hr class="text-secondary" />
-        <div class="d-flex justify-content-between align-items-center">
-          <p class="fw-semibold mb-0">Full Total</p>
-          <p class="fw-semibold mb-0">$649</p>
-        </div>
-
-        <div
-          class="d-flex flex-row justify-content-between align-items-center mt-3"
-        >
-          <button class="btn border-0 text-white p-2">
-            <i class="fa-solid fa-pen-to-square"></i>
-          </button>
-          <button class="btn border-0 text-white p-2">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-          <button
-            class="btn flex-grow-1 text-dark fw-semibold py-2 border-0"
-            style="background-color: #c9caee"
-            data-bs-toggle="modal"
-            data-bs-target="#orderDetailsModal"
-          >
-            Pay Bill
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Order Card 02 (In Process) -->
-    <div class="col-md-6 col-lg-4">
-      <div
-        class="card bg-dark border-0 text-white rounded-3 shadow-sm p-3"
-        style="background-color: #1b1d1e"
-      >
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="fw-bold fs-5">02</span>
-          <span
-            class="px-3 py-1 rounded-3 small fw-semibold"
-            style="background-color: #f6e7b1; color: #111"
-            >⧗ In Process</span
-          >
-        </div>
-        <p class="fw-semibold mb-0">Yasas Banuka</p>
-        <p class="text-muted small mb-3">Tech Purchase</p>
-        <p class="small mb-1 text-muted">Wednesday, 28, 2025 • 4:48 PM</p>
-
-        <table class="table table-dark table-borderless mb-0">
-          <thead class="small text-muted">
-            <tr>
-              <th>Qty</th>
-              <th>Items</th>
-              <th class="text-end">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>01</td>
-              <td>Macbook Air</td>
-              <td class="text-end">$600</td>
-            </tr>
-            <tr>
-              <td>01</td>
-              <td>iPhone 17 Max</td>
-              <td class="text-end">$120</td>
-            </tr>
-          </tbody>
-        </table>
-        <hr class="text-secondary" />
-        <div class="d-flex justify-content-between align-items-center">
-          <p class="fw-semibold mb-0">Full Total</p>
-          <p class="fw-semibold mb-0">$649</p>
-        </div>
-
-        <div
-          class="d-flex flex-row justify-content-between align-items-center mt-3"
-        >
-          <button class="btn border-0 text-white p-2">
-            <i class="fa-solid fa-pen-to-square"></i>
-          </button>
-          <button class="btn border-0 text-white p-2">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-          <button
-            class="btn flex-grow-1 text-dark fw-semibold py-2 border-0"
-            style="background-color: #c9caee"
-            data-bs-toggle="modal"
-            data-bs-target="#orderDetailsModal"
-          >
-            Pay Bill
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Order Card 03 (Not Paid) -->
-    <div class="col-md-6 col-lg-4">
-      <div
-        class="card bg-dark border-0 text-white rounded-3 shadow-sm p-3"
-        style="background-color: #1b1d1e"
-      >
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="fw-bold fs-5">03</span>
-          <span
-            class="px-3 py-1 rounded-3 small fw-semibold"
-            style="background-color: #f4b6b6; color: #111"
-            >✗ Not Paid</span
-          >
-        </div>
-        <p class="fw-semibold mb-0">Yasas Banuka</p>
-        <p class="text-muted small mb-3">Tech Purchase</p>
-        <p class="small mb-1 text-muted">Wednesday, 28, 2025 • 4:48 PM</p>
-
-        <table class="table table-dark table-borderless mb-0">
-          <thead class="small text-muted">
-            <tr>
-              <th>Qty</th>
-              <th>Items</th>
-              <th class="text-end">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>01</td>
-              <td>Macbook Air</td>
-              <td class="text-end">$600</td>
-            </tr>
-            <tr>
-              <td>01</td>
-              <td>iPhone 17 Max</td>
-              <td class="text-end">$120</td>
-            </tr>
-          </tbody>
-        </table>
-        <hr class="text-secondary" />
-        <div class="d-flex justify-content-between align-items-center">
-          <p class="fw-semibold mb-0">Full Total</p>
-          <p class="fw-semibold mb-0">$649</p>
-        </div>
-
-        <div
-          class="d-flex flex-row justify-content-between align-items-center mt-3"
-        >
-          <button class="btn border-0 text-white p-2">
-            <i class="fa-solid fa-pen-to-square"></i>
-          </button>
-          <button class="btn border-0 text-white p-2">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-          <button
-            class="btn flex-grow-1 text-dark fw-semibold py-2 border-0"
-            style="background-color: #c9caee"
-            data-bs-toggle="modal"
-            data-bs-target="#orderDetailsModal"
-          >
-            Pay Bill
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="row g-4 pe-lg-4" id="orderCardWrapper"></div>
 
   <!-- Order Details Modal -->
   <div
@@ -271,139 +82,160 @@
     aria-labelledby="orderDetailsModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <!-- we limit modal width via inline style to match right panel width -->
+    <div class="modal-dialog modal-dialog-centered">
       <div
-        class="modal-content bg-dark text-white rounded-3 shadow-lg"
-        style="max-width: 420px; margin-left: auto"
+        class="modal-content bg-dark text-white rounded-3 shadow-lg p-3"
+        style="max-width: 420px; margin: auto"
       >
-        <div class="modal-header border-0 pt-4 pb-2">
+        <div class="modal-header border-0">
           <div>
             <h5 class="modal-title fw-bold mb-0" id="orderDetailsModalLabel">
-              Order 02
+              Order
             </h5>
-            <div class="small text-muted">Yasas Banuka</div>
+            <div class="small text-muted" id="modalCustomerName">Customer</div>
           </div>
-
-          <!-- edit icon (right) -->
           <button
             type="button"
+            id="editOrderBtn"
             class="btn btn-sm border-0 text-white ms-auto"
-            data-bs-toggle="tooltip"
-            title="Edit"
           >
             <i class="fa-solid fa-pen"></i>
           </button>
         </div>
 
-        <div class="modal-body pt-0 px-4 pb-4">
-          <!-- items in rounded blocks -->
-          <div class="d-flex flex-column gap-2 mb-4">
-            <div
-              class="d-flex justify-content-between align-items-center rounded-3 p-3"
-              style="background-color: #2a2c2d"
-            >
-              <div class="d-flex align-items-center gap-3">
-                <div
-                  class="rounded-3 d-flex align-items-center justify-content-center"
-                  style="
-                    width: 40px;
-                    height: 40px;
-                    background-color: #dbeaf5;
-                    color: #081018;
-                    font-weight: 700;
-                  "
-                >
-                  01
-                </div>
-                <div>
-                  <div class="fw-semibold">Macbook Air</div>
-                  <div class="small text-muted">x 1</div>
-                </div>
-              </div>
-              <div class="fw-semibold">$600.00</div>
-            </div>
-
-            <div
-              class="d-flex justify-content-between align-items-center rounded-3 p-3"
-              style="background-color: #2a2c2d"
-            >
-              <div class="d-flex align-items-center gap-3">
-                <div
-                  class="rounded-3 d-flex align-items-center justify-content-center"
-                  style="
-                    width: 40px;
-                    height: 40px;
-                    background-color: #dbeaf5;
-                    color: #081018;
-                    font-weight: 700;
-                  "
-                >
-                  02
-                </div>
-                <div>
-                  <div class="fw-semibold">iPhone 17 Max</div>
-                  <div class="small text-muted">x 2</div>
-                </div>
-              </div>
-              <div class="fw-semibold">$120.00</div>
+        <div class="modal-body pt-0 px-3 pb-3">
+          <div class="mb-3">
+            <label class="form-label text-muted small">Select Customer</label>
+            <div class="d-flex gap-2">
+              <select
+                class="form-select bg-dark text-white border-secondary"
+                id="customerSelect"
+              ></select>
+              <button
+                class="btn btn-outline-light"
+                id="addCustomerBtn"
+                data-bs-toggle="modal"
+                data-bs-target="#addCustomerModal"
+              >
+                <i class="fa-solid fa-user-plus"></i>
+              </button>
             </div>
           </div>
 
-          <!-- totals block -->
+          <div class="mb-3">
+            <label class="form-label text-muted small">Select Items</label>
+            <select
+              id="itemSelect"
+              multiple
+              class="form-select bg-dark text-white border-secondary"
+              style="height: 120px"
+            ></select>
+            <div class="small text-muted mt-1">
+              Hold Ctrl/Cmd (or Shift) to select multiple
+            </div>
+          </div>
+
+          <div id="modalItemsList" class="d-flex flex-column gap-2 mb-4"></div>
+
           <div class="rounded-3 p-3 mb-4" style="background-color: #2a2c2d">
-            <div class="d-flex justify-content-between small text-muted mb-3">
+            <div
+              class="d-flex justify-content-between small text-muted mb-3"
+              id="modalSubtotal"
+            >
               <div>Subtotal</div>
-              <div>$110.00</div>
+              <div>$0.00</div>
             </div>
-
-            <div class="d-flex justify-content-between fw-semibold mb-2">
+            <div
+              class="d-flex justify-content-between fw-semibold mb-2"
+              id="modalTotal"
+            >
               <div>Total</div>
-              <div>$117.50</div>
+              <div>$0.00</div>
             </div>
-
             <hr style="border-style: dashed; border-color: #3a3c3d" />
-            <div class="d-flex justify-content-between small text-muted mt-2">
+            <div
+              class="d-flex justify-content-between small text-muted mt-2"
+              id="modalReceived"
+            >
               <div>Received</div>
-              <div>$117.50</div>
+              <div>$0.00</div>
             </div>
           </div>
 
-          <!-- payment method buttons -->
+          <div class="mb-3">
+            <label class="form-label text-muted small">Order Status</label>
+            <select
+              id="orderStatusSelect"
+              class="form-select bg-dark text-white border-secondary"
+            >
+              <option value="not paid">Not Paid</option>
+              <option value="in process">In Process</option>
+              <option value="paid">Paid</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+
           <p class="fw-semibold mb-2">Payment Method</p>
-          <div class="d-flex gap-2 mb-3">
+          <div class="d-flex justify-content-between mb-3 gap-2 flex-wrap">
             <button
-              class="btn bg-transparent border rounded-3 flex-grow-1 py-3 text-white"
+              class="btn bg-transparent border text-white flex-fill d-flex align-items-center justify-content-center gap-2 py-3 payment-btn"
+              data-method="Cash"
               style="border-color: #3a3c3d"
             >
-              <i class="fa-solid fa-money-bill me-2"></i>
-              <div class="d-none d-md-inline">Cash</div>
+              <i class="fa-solid fa-money-bill"></i><span>Cash</span>
             </button>
-
             <button
-              class="btn bg-transparent border rounded-3 flex-grow-1 py-3 text-white"
+              class="btn bg-transparent border text-white flex-fill d-flex align-items-center justify-content-center gap-2 py-3 payment-btn"
+              data-method="Debit"
               style="border-color: #3a3c3d"
             >
-              <i class="fa-solid fa-credit-card me-2"></i>
-              <div class="d-none d-md-inline">Debit Card</div>
+              <i class="fa-solid fa-credit-card"></i><span>Debit</span>
             </button>
-
             <button
-              class="btn text-dark flex-grow-1 py-3 border-0 rounded-3"
+              class="btn text-dark flex-fill d-flex align-items-center justify-content-center gap-2 py-3 border-0 payment-btn"
+              data-method="Wallet"
               style="background-color: #c9caee"
             >
-              <i class="fa-solid fa-wallet me-2"></i>
-              <div class="d-none d-md-inline">E-Wallet</div>
+              <i class="fa-solid fa-wallet"></i><span>Wallet</span>
             </button>
           </div>
 
           <button
+            id="saveOrderBtn"
             class="btn w-100 rounded-3 fw-semibold text-dark py-3"
             style="background-color: #c9caee"
           >
-            Order Completed
+            Save Order
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD CUSTOMER MODAL -->
+  <div class="modal fade" id="addCustomerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white rounded-3 shadow-lg p-3">
+        <h5 class="fw-bold mb-3">Add Customer</h5>
+        <div class="mb-3">
+          <label class="form-label small text-muted">Name</label>
+          <input
+            type="text"
+            class="form-control bg-dark text-white border-secondary"
+            id="newCustomerName"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label small text-muted">Email</label>
+          <input
+            type="email"
+            class="form-control bg-dark text-white border-secondary"
+            id="newCustomerEmail"
+          />
+        </div>
+        <button class="btn btn-light text-dark w-100" id="saveCustomerBtn">
+          Save Customer
+        </button>
       </div>
     </div>
   </div>

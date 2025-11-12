@@ -3,6 +3,7 @@ import {
   displayCategoryCard,
   displayItemCard,
 } from "../../controller/item-controller.js";
+import { displayOrderCard } from "../../controller/order-controller.js";
 import displayDate from "../../utils/date-display.js";
 import { onClick } from "../../utils/event-helper.js";
 import loadView from "../../utils/loader.js";
@@ -31,7 +32,10 @@ onClick(".itemsBtn", () => {
 
 onClick(".checkoutBtn", () => {
   changeBtnClasses(".checkoutBtn");
-  loadView("#rightCol", "./views/pages/checkout.html", displayDate);
+  loadView("#rightCol", "./views/pages/checkout.html", () => {
+    displayDate();
+    displayOrderCard();
+  });
 });
 
 const changeBtnClasses = (activeBtn) => {
