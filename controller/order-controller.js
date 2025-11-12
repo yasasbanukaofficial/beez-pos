@@ -7,7 +7,6 @@ import {
   updateOrder,
 } from "../model/order-model.js";
 import { getCustomers, saveCustomer } from "../model/customer-model.js";
-// 💡 Importing the new stock check function
 import {
   getItems,
   updateItemStockQty,
@@ -17,13 +16,14 @@ import { onClick, onkeyDown } from "../utils/event-helper.js";
 import { displayToast } from "../utils/toast.js";
 import { OrderDTO } from "../dto/order-dto.js";
 
+// Main Order Controller for handling state, business logic, and UI rendering.
+
 let currentEditingIndex = null;
 let isEditMode = false;
 let currentOrderItems = [];
 
 const calculateTotal = (orderedItems) => {
   if (!orderedItems || orderedItems.length === 0) return "0.00";
-  // NOTE: Order items use 'price', so this is fine.
   return orderedItems
     .reduce((sum, item) => sum + item.price * item.qty, 0)
     .toFixed(2);
@@ -110,10 +110,6 @@ const getOrderCard = (order, index) => {
     </div>`;
 };
 
-/**
- * Displays order cards, optionally filtered by status.
- * @param {string} [filterStatus='All'] - The status to filter orders by (e.g., 'Paid', 'In Process', 'Not Paid').
- */
 const displayOrderCard = (filterStatus = "All") => {
   $("#orderCardWrapper").empty();
   const allOrders = getOrders();
@@ -122,19 +118,15 @@ const displayOrderCard = (filterStatus = "All") => {
   if (filterStatus === "All") {
     ordersToDisplay = allOrders;
   } else {
-    // Filter orders based on the requested status
     ordersToDisplay = allOrders.filter(
       (order) => order.orderStatus?.toLowerCase() === filterStatus.toLowerCase()
     );
   }
 
   ordersToDisplay.forEach((order, index) =>
-    // We use the index in the original getOrders() array for data-order-index
-    // to ensure getOrderByIndex works correctly later.
     $("#orderCardWrapper").append(getOrderCard(order, allOrders.indexOf(order)))
   );
 
-  // If filtered, update the order count visibility/message if needed
   if (ordersToDisplay.length === 0 && filterStatus !== "All") {
     $("#orderCardWrapper").html(
       `<div class="col-12"><p class="text-center text-muted fs-5 mt-5">No ${filterStatus} orders found.</p></div>`
@@ -147,7 +139,6 @@ const updateItemDropdown = () => {
   itemMenu.empty();
   const items = getItems();
   items.forEach((item) => {
-    // FIX: Use item.itemPrice (from DTO getter) for display and data attribute
     const priceValue = item.itemPrice;
     const formattedPrice = priceValue ? priceValue.toFixed(2) : "0.00";
 
@@ -156,9 +147,9 @@ const updateItemDropdown = () => {
     );
     const itemRow = `
       <div class="d-flex justify-content-between align-items-center px-2 py-2 dropdown-item bg-dark text-white rounded-3 item-select-row"
-        data-item-name="${item.name}" data-item-price="${
-      priceValue // Use priceValue here for the data attribute
-    }" data-item-stock="${item.itemQty}"> 
+        data-item-name="${
+          item.name
+        }" data-item-price="${priceValue}" data-item-stock="${item.itemQty}"> 
         <div class="d-flex flex-column">
           <div class="fw-semibold">${item.name}</div>
           <div class="small text-muted">$${formattedPrice}</div>
@@ -242,11 +233,9 @@ const loadOrderDetailsModal = (order) => {
   currentEditingIndex = order ? getOrders().indexOf(order) : null;
   const customers = getCustomers();
 
-  // Populate Customer Select
   $("#customerSelect").html(
     customers
       .map(
-        // Use index as a fallback value if customer DTO doesn't have an 'id'
         (c, idx) =>
           `<option value="${c.id || idx}" data-email="${c.email}">${
             c.name
@@ -255,7 +244,6 @@ const loadOrderDetailsModal = (order) => {
       .join("")
   );
 
-  // Populate Order Status Select
   $("#orderStatusSelect").html(
     [
       '<option value="In Process">In Process</option>',
@@ -264,9 +252,7 @@ const loadOrderDetailsModal = (order) => {
     ].join("")
   );
 
-  // Update Modal Header and State
   if (order) {
-    // EXISTING ORDER: Start in View Mode (isEditMode = false)
     isEditMode = false;
 
     const selectedCustomer =
@@ -280,7 +266,6 @@ const loadOrderDetailsModal = (order) => {
         order.customerName
       }</span><div class="small text-muted">${order.customerEmail || ""}</div>`
     );
-    // Use the ID or index for setting the value
     $("#customerSelect")
       .val(
         selectedCustomer
@@ -297,12 +282,10 @@ const loadOrderDetailsModal = (order) => {
       .removeClass("fa-check")
       .addClass("fa-pen");
   } else {
-    // NEW ORDER: Start in Edit Mode (isEditMode = true)
     isEditMode = true;
 
     $("#orderDetailsModalLabel").text("New Order");
 
-    // Select the first customer automatically
     const firstCustomer = customers[0];
     const firstCustomerValue = firstCustomer ? firstCustomer.id || 0 : "";
     const firstCustomerName = firstCustomer
@@ -323,7 +306,6 @@ const loadOrderDetailsModal = (order) => {
     $("#editOrderBtn").addClass("d-none");
   }
 
-  // Set the disabled property based on the current isEditMode state
   $(
     "#customerSelect, #orderStatusSelect, #itemDropdownButton, #addCustomerBtn"
   ).prop("disabled", !isEditMode);
@@ -335,7 +317,6 @@ const loadOrderDetailsModal = (order) => {
 
 const handleSaveOrder = () => {
   const customerId = $("#customerSelect").val();
-  // Find customer by ID (or index if ID is not available)
   const selectedCustomer = getCustomers().find(
     (c, index) => c.id == customerId || index == customerId
   );
@@ -344,7 +325,6 @@ const handleSaveOrder = () => {
     "method"
   );
 
-  // Validation
   if (!selectedCustomer) {
     displayToast("error", "Please select a customer.");
     return;
@@ -375,16 +355,14 @@ const handleSaveOrder = () => {
   let success = false;
   let message = "";
   let originalStatus = null;
-  let currentFilterStatus = $(".filter-btn.btn-light").data("status") || "All"; // Get currently active filter
+  let currentFilterStatus = $(".filter-btn.btn-light").data("status") || "All";
 
   if (currentEditingIndex !== null) {
-    // Get the original order status if editing an existing order
     const originalOrder = getOrderByIndex(currentEditingIndex);
     originalStatus = originalOrder ? originalOrder.orderStatus : null;
 
     orderData.index = currentEditingIndex;
 
-    // --- CRUCIAL STOCK CHECK BEFORE UPDATING TO PAID ---
     const isStatusChangeToPaid =
       status.toLowerCase() === "paid" &&
       originalStatus?.toLowerCase() !== "paid";
@@ -396,15 +374,13 @@ const handleSaveOrder = () => {
           "error",
           `Failed: ${stockCheckResult} is now out of stock.`
         );
-        return; // Stop the save operation
+        return;
       }
     }
-    // ---------------------------------------------------
 
     success = updateOrder(orderData);
     message = "Order updated successfully!";
   } else {
-    // --- CRUCIAL STOCK CHECK BEFORE SAVING NEW PAID ORDER ---
     if (status.toLowerCase() === "paid") {
       const stockCheckResult = checkStockAvailability(currentOrderItems);
       if (stockCheckResult !== true) {
@@ -412,43 +388,32 @@ const handleSaveOrder = () => {
           "error",
           `Failed: ${stockCheckResult} is now out of stock.`
         );
-        return; // Stop the save operation
+        return;
       }
     }
-    // ---------------------------------------------------
 
     success = saveOrder(orderData);
     message = "New order saved successfully!";
   }
 
   if (success) {
-    // 💡 STOCK DEDUCTION LOGIC
-    // Deduct stock if the order status is 'Paid'
-    // AND it's a new order OR the status changed to 'Paid' from something else.
     if (status.toLowerCase() === "paid") {
       const isNewOrder = currentEditingIndex === null;
       const isStatusChangeToPaid = originalStatus?.toLowerCase() !== "paid";
 
-      // If we made it this far, the stock check already passed, so we can deduct
       if (isNewOrder || isStatusChangeToPaid) {
-        // Calling the imported model function to deduct stock
         updateItemStockQty(currentOrderItems);
-
-        // Re-render the item dropdown to reflect the new stock levels
         updateItemDropdown();
       }
     }
 
     displayToast("success", message);
-    // 💡 Re-display orders using the currently active filter status
     displayOrderCard(currentFilterStatus);
     $("#orderDetailsModal").modal("hide");
   } else {
     displayToast("error", "Failed to save order.");
   }
 };
-
-// --- Event Listeners ---
 
 onClick(".order-card", function () {
   const index = $(this).data("order-index");
@@ -487,7 +452,6 @@ onClick("#editOrderBtn", function () {
       }</div>
     `);
   } else {
-    // If exiting edit mode, revert items list display to non-editable
     renderItemsList();
   }
 });
@@ -498,7 +462,6 @@ onClick(".delete-order-btn", function (e) {
   if (confirm("Are you sure you want to delete this order?")) {
     if (deleteOrder(index)) {
       displayToast("success", "Order deleted successfully!");
-      // Re-display orders using the currently active filter status
       displayOrderCard($(".filter-btn.btn-light").data("status") || "All");
     } else {
       displayToast("error", "Failed to delete order!");
@@ -512,7 +475,6 @@ onClick("#itemDropdownMenu .add-item-btn", function (e) {
   const row = $(this).closest(".item-select-row");
   const name = row.data("item-name");
 
-  // Retrieve data attribute string, which was set using item.itemPrice, and ensure it's a number
   const priceString = row.data("item-price");
   const price = parseFloat(priceString) || 0;
 
@@ -523,12 +485,10 @@ onClick("#itemDropdownMenu .add-item-btn", function (e) {
     return;
   }
 
-  // Check if item already exists in current order
   let existingItem = currentOrderItems.find((item) => item.name === name);
   if (existingItem) {
     existingItem.qty += 1;
   } else {
-    // Note: The price stored in currentOrderItems is named 'price' (lowercase)
     currentOrderItems.push({ name, qty: 1, price });
   }
 
@@ -567,7 +527,6 @@ onClick("#saveCustomerBtn", function () {
     displayToast("success", "Customer saved! Please select from the dropdown.");
     $("#addCustomerModal").modal("hide");
 
-    // Refresh the order modal state to update the customer dropdown
     const customers = getCustomers();
     $("#customerSelect").html(
       customers
@@ -579,11 +538,9 @@ onClick("#saveCustomerBtn", function () {
         )
         .join("")
     );
-    // Select the newly added customer
     const lastCustomer = customers[customers.length - 1];
     $("#customerSelect").val(lastCustomer.id || customers.length - 1);
 
-    // Ensure the main order modal is still open
     $("#orderDetailsModal").modal("show");
   } else {
     displayToast("error", "Failed to save customer.");
@@ -593,24 +550,19 @@ onClick("#saveCustomerBtn", function () {
 onkeyDown("#searchOrderInput", (e) => {
   const value = $("#searchOrderInput").val();
   if (e.key === "Backspace" || !value) {
-    // When search is cleared, use the current filter status
     displayOrderCard($(".filter-btn.btn-light").data("status") || "All");
   } else {
     const results = getOrderBySearchInput(value);
     $("#orderCardWrapper").empty();
-    // Note: Search results are not filtered by status tabs here, just displayed
     results.forEach((order, index) =>
       $("#orderCardWrapper").append(getOrderCard(order, index))
     );
   }
 });
 
-// ⭐ Filter Button Handler
 onClick(".filter-btn", function () {
-  // 1. Get the status to filter by
   const status = $(this).data("status");
 
-  // 2. Update button styling (active state)
   $(".filter-btn")
     .removeClass("btn-light text-dark")
     .addClass("btn-outline-secondary text-white");
@@ -618,7 +570,6 @@ onClick(".filter-btn", function () {
     .removeClass("btn-outline-secondary text-white")
     .addClass("btn-light text-dark");
 
-  // 3. Display filtered cards
   displayOrderCard(status);
 });
 
