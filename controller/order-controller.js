@@ -18,6 +18,7 @@ let currentOrderItems = [];
 
 const calculateTotal = (orderedItems) => {
   if (!orderedItems || orderedItems.length === 0) return "0.00";
+  // NOTE: Order items use 'price', so this is fine.
   return orderedItems
     .reduce((sum, item) => sum + item.price * item.qty, 0)
     .toFixed(2);
@@ -117,8 +118,9 @@ const updateItemDropdown = () => {
   itemMenu.empty();
   const items = getItems();
   items.forEach((item) => {
-    // FIX applied in previous steps: Defensive check for item.price display
-    const formattedPrice = item.price ? item.price.toFixed(2) : "0.00";
+    // FIX 1: Use item.itemPrice (from DTO getter) for display and data attribute
+    const priceValue = item.itemPrice;
+    const formattedPrice = priceValue ? priceValue.toFixed(2) : "0.00";
 
     const isAdded = currentOrderItems.some(
       (orderItem) => orderItem.name === item.name
@@ -126,14 +128,14 @@ const updateItemDropdown = () => {
     const itemRow = `
       <div class="d-flex justify-content-between align-items-center px-2 py-2 dropdown-item bg-dark text-white rounded-3 item-select-row"
         data-item-name="${item.name}" data-item-price="${
-      item.price
-    }" data-item-stock="${item.stock}">
+      priceValue // Use priceValue here for the data attribute
+    }" data-item-stock="${item.itemQty}"> 
         <div class="d-flex flex-column">
           <div class="fw-semibold">${item.name}</div>
           <div class="small text-muted">$${formattedPrice}</div>
         </div>
         <div class="d-flex align-items-center gap-2">
-          <div class="small text-muted">Stock: ${item.stock}</div>
+          <div class="small text-muted">Stock: ${item.itemQty}</div>
           <button class="btn btn-sm ${
             isAdded ? "btn-outline-secondary" : "btn-success"
           } add-item-btn" ${isAdded ? "disabled" : ""}>
@@ -266,12 +268,12 @@ const loadOrderDetailsModal = (order) => {
       .removeClass("fa-check")
       .addClass("fa-pen");
   } else {
-    // NEW ORDER: Start in Edit Mode (isEditMode = true) - FIX 3
+    // NEW ORDER: Start in Edit Mode (isEditMode = true)
     isEditMode = true;
 
     $("#orderDetailsModalLabel").text("New Order");
 
-    // Select the first customer automatically (FIX 2)
+    // Select the first customer automatically
     const firstCustomer = customers[0];
     const firstCustomerValue = firstCustomer ? firstCustomer.id || 0 : "";
     const firstCustomerName = firstCustomer
@@ -313,7 +315,7 @@ const handleSaveOrder = () => {
     "method"
   );
 
-  // Validation: This is why setting a default selection in loadOrderDetailsModal is crucial (FIX 2)
+  // Validation
   if (!selectedCustomer) {
     displayToast("error", "Please select a customer.");
     return;
@@ -425,9 +427,9 @@ onClick("#itemDropdownMenu .add-item-btn", function (e) {
   const row = $(this).closest(".item-select-row");
   const name = row.data("item-name");
 
-  // FIX 1: Retrieve data attribute string and use parseFloat with a 0 fallback to prevent NaN
+  // FIX 1: Retrieve data attribute string, which was set using item.itemPrice, and ensure it's a number
   const priceString = row.data("item-price");
-  const price = parseFloat(priceString) || 0;
+  const price = parseFloat(priceString) || 0; // The 0 fallback is for safety, but priceString should now be correct
 
   const stock = parseInt(row.data("item-stock"));
 
@@ -441,6 +443,7 @@ onClick("#itemDropdownMenu .add-item-btn", function (e) {
   if (existingItem) {
     existingItem.qty += 1;
   } else {
+    // Note: The price stored in currentOrderItems is named 'price' (lowercase)
     currentOrderItems.push({ name, qty: 1, price });
   }
 
