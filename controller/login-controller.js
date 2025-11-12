@@ -2,7 +2,7 @@ import { getUsers } from "../model/user-model.js";
 import PinInputDTO from "./pin-input-controller.js";
 import { handleAuthentication } from "./auth-controller.js";
 import { sessionController } from "./session-controller.js";
-import displayDate from "../../utils/date-display.js";
+import displayDate from "../utils/date-display.js";
 
 // Variables
 const pinNumbers = [7, 8, 9, 4, 5, 6, 1, 2, 3, "<-", 0, "->"];
