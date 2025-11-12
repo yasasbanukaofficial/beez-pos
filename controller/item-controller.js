@@ -39,7 +39,7 @@ const getItemCard = (item) => {
   return `
     <div class="row row-cols-1 g-2">
         <div class="col g-3">
-            <div class="card bg-dark text-light border-0 rounded-3 shadow-sm h-100">
+            <div class="card bg-dark text-light border-0 rounded-3 shadow-sm h-100" data-bs-toggle="modal" data-bs-target="#itemFormModal">
                 <div class="border-3 rounded-top" style="border-top: 1px solid #C9CAEE;"></div>
                 <div class="card-body p-3">
                     <div class="mb-2">

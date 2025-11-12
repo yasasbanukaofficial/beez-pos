@@ -31,4 +31,217 @@
       style="scrollbar-width: none"
     ></div>
   </div>
+  <!-- Form Modal -->
+  <div
+    class="modal fade"
+    id="itemFormModal"
+    tabindex="-1"
+    aria-labelledby="itemFormModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark shadow-lg rounded-3">
+        <div class="modal-header border-0 p-4">
+          <a
+            href="#"
+            class="text-white text-decoration-none fs-4 opacity-75"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+          <h5
+            class="modal-title fw-bold text-center w-100 pe-3"
+            id="itemFormModalLabel"
+          >
+            Item Info
+          </h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white d-none"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body px-4 pb-4 pt-0">
+          <form id="itemForm">
+            <div class="mb-4">
+              <label
+                class="form-label fw-semibold text-body-secondary small mb-2"
+                >Product Category</label
+              >
+              <div
+                class="row row-cols-2 g-2"
+                role="group"
+                aria-label="Product category"
+              >
+                <div class="col">
+                  <input
+                    type="radio"
+                    class="btn-check border-1"
+                    name="category"
+                    id="cat-mobile"
+                    autocomplete="off"
+                    checked
+                  />
+                  <label
+                    class="btn btn-outline-secondary text-white rounded-3 text-start p-3 d-flex justify-content-between align-items-center small w-100"
+                    style="border-color: #cfdddb"
+                    for="cat-mobile"
+                  >
+                    Mobile
+                    <span
+                      class="badge rounded-3 text-muted"
+                      style="background-color: #fac1d9"
+                      >150</span
+                    >
+                  </label>
+                </div>
+
+                <div class="col">
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="category"
+                    id="cat-laptop"
+                    autocomplete="off"
+                  />
+                  <label
+                    class="btn btn-outline-secondary text-white rounded-3 text-start p-3 d-flex justify-content-between align-items-center small w-100"
+                    style="border-color: #f0c8cf"
+                    for="cat-laptop"
+                  >
+                    Laptop
+                    <span
+                      class="badge rounded-3 text-muted"
+                      style="background-color: #fac1d9"
+                      >120</span
+                    >
+                  </label>
+                </div>
+
+                <div class="col">
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="category"
+                    id="cat-tablet"
+                    autocomplete="off"
+                  />
+                  <label
+                    class="btn btn-outline-secondary text-white rounded-3 text-start p-3 d-flex justify-content-between align-items-center small w-100"
+                    style="border-color: #c2dbe9"
+                    for="cat-tablet"
+                  >
+                    Tablet
+                    <span
+                      class="badge rounded-3 text-muted"
+                      style="background-color: #fac1d9"
+                      >10</span
+                    >
+                  </label>
+                </div>
+
+                <div class="col">
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="category"
+                    id="cat-Other"
+                    autocomplete="off"
+                  />
+                  <label
+                    class="btn btn-outline-secondary text-white rounded-3 text-start p-3 d-flex justify-content-between align-items-center small w-100"
+                    style="border-color: #c9caee"
+                    for="cat-Other"
+                  >
+                    Other
+                    <span
+                      class="badge rounded-3 text-muted"
+                      style="background-color: #fac1d9"
+                      >10</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label
+                for="itemName"
+                class="form-label fw-semibold text-body-secondary small mb-2"
+                >Name</label
+              >
+              <input
+                type="text"
+                class="form-control text-white rounded-3 py-3 px-3 small border-0"
+                style="background-color: #3d4142"
+                id="itemName"
+                value="MSI Cyborg 15 A12V"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label
+                for="itemStatus"
+                class="form-label fw-semibold text-body-secondary small mb-2"
+                >Product Status</label
+              >
+              <select
+                class="form-select text-white rounded-3 py-3 px-3 small border-0"
+                id="itemStatus"
+                style="background-color: #3d4142"
+                aria-label="Product Status"
+              >
+                <option value="Active" selected>Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="OutOfStock">Out of Stock</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label
+                for="itemQty"
+                class="form-label fw-semibold text-body-secondary small mb-2"
+                >Piece / Item / Quantity</label
+              >
+              <input
+                type="number"
+                class="form-control text-white rounded-3 py-3 px-3 small border-0"
+                style="background-color: #3d4142"
+                id="itemQty"
+                value="0"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label
+                for="itemPrice"
+                class="form-label fw-semibold text-body-secondary small mb-2"
+                >Price</label
+              >
+              <input
+                type="text"
+                class="form-control text-white rounded-3 py-3 px-3 small border-0"
+                style="background-color: #3d4142"
+                id="itemPrice"
+                value="$600"
+              />
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer border-0 px-4 pb-4">
+          <button
+            type="button"
+            class="btn btn-primary w-100 text-dark fw-semibold fs-6 rounded-3 py-3 border-0"
+            style="background-color: #c9caee"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
