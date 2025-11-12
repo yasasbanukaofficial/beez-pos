@@ -1,8 +1,17 @@
 import { ItemDTO as Item } from "../dto/item-dto.js";
 import { itemList as itemDB } from "../db/db.js";
 
-const saveItem = (name, category, itemQty, itemPrice, productStatus) => {
-  itemDB.push(new Item(name, category, itemQty, itemPrice, productStatus));
+const saveItem = (updatedItem) => {
+  itemDB.push(
+    new Item(
+      updatedItem.name,
+      updatedItem.category,
+      updatedItem.qty,
+      updatedItem.price,
+      updatedItem.availability
+    )
+  );
+  return true;
 };
 
 const updateItem = (updatedItem) => {

@@ -1,8 +1,10 @@
 import { categoriesList } from "../db/db.js";
 import {
+  deleteItem,
   getItemByIndex,
   getItemByName,
   getItems,
+  saveItem,
   updateItem,
 } from "../model/item-model.js";
 import { onClick } from "../utils/event-helper.js";
@@ -136,9 +138,21 @@ onClick("#saveItemBtn", function () {
   };
 
   if (!getItemByIndex(updatedItem.index)) {
-    displayToast("error", "Item doesn't exist!");
+    saveItem(updateItem)
+      ? displayToast("success", "Added new item!")
+      : displayToast("error", "Failed to add new item!");
   } else if (updateItem(updatedItem)) {
-    displayToast("success", "Item successfully updated!");
+    displayToast("success", "Updated item successfully!");
+    displayItemCard();
+    $("#itemFormModal").modal("hide");
+  }
+});
+
+onClick("#deleteItemBtn", function () {
+  if (!getItemByIndex(currentEditingIndex)) {
+    displayToast("error", "Item doesn't exist!");
+  } else if (deleteItem(currentEditingIndex)) {
+    displayToast("success", "Deleted item successfully!");
     displayItemCard();
     $("#itemFormModal").modal("hide");
   }
