@@ -50,6 +50,19 @@ const getItemBySearchInput = (name) => {
   );
 };
 
+const updateItemStockQty = (orderedItems) => {
+  orderedItems.forEach((orderItem) => {
+    const itemInStock = itemDB.find(
+      (stockItem) => stockItem.name === orderItem.name
+    );
+
+    if (itemInStock) {
+      const newQty = itemInStock.itemQty - orderItem.qty;
+      itemInStock.itemQty = Math.max(0, newQty);
+    }
+  });
+};
+
 export {
   saveItem,
   updateItem,
@@ -58,4 +71,5 @@ export {
   getItemByIndex,
   getItemByName,
   getItemBySearchInput,
+  updateItemStockQty,
 };

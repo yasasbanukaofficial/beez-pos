@@ -7,7 +7,8 @@ import {
   updateOrder,
 } from "../model/order-model.js";
 import { getCustomers, saveCustomer } from "../model/customer-model.js";
-import { getItems } from "../model/item-model.js";
+// 💡 Correctly importing updateItemStockQty from item-model.js
+import { getItems, updateItemStockQty } from "../model/item-model.js";
 import { onClick, onkeyDown } from "../utils/event-helper.js";
 import { displayToast } from "../utils/toast.js";
 import { OrderDTO } from "../dto/order-dto.js";
@@ -118,7 +119,7 @@ const updateItemDropdown = () => {
   itemMenu.empty();
   const items = getItems();
   items.forEach((item) => {
-    // FIX 1: Use item.itemPrice (from DTO getter) for display and data attribute
+    // FIX: Use item.itemPrice (from DTO getter) for display and data attribute
     const priceValue = item.itemPrice;
     const formattedPrice = priceValue ? priceValue.toFixed(2) : "0.00";
 
@@ -345,8 +346,13 @@ const handleSaveOrder = () => {
 
   let success = false;
   let message = "";
+  let originalStatus = null;
 
   if (currentEditingIndex !== null) {
+    // Get the original order status if editing an existing order
+    const originalOrder = getOrderByIndex(currentEditingIndex);
+    originalStatus = originalOrder ? originalOrder.orderStatus : null;
+
     orderData.index = currentEditingIndex;
     success = updateOrder(orderData);
     message = "Order updated successfully!";
@@ -356,6 +362,22 @@ const handleSaveOrder = () => {
   }
 
   if (success) {
+    // 💡 STOCK DEDUCTION LOGIC
+    // Deduct stock if the order status is 'Paid'
+    // AND it's a new order OR the status changed to 'Paid' from something else.
+    if (status.toLowerCase() === "paid") {
+      const isNewOrder = currentEditingIndex === null;
+      const isStatusChangeToPaid = originalStatus?.toLowerCase() !== "paid";
+
+      if (isNewOrder || isStatusChangeToPaid) {
+        // Calling the imported model function as requested
+        updateItemStockQty(currentOrderItems);
+
+        // Re-render the item dropdown to reflect the new stock levels
+        updateItemDropdown();
+      }
+    }
+
     displayToast("success", message);
     displayOrderCard();
     $("#orderDetailsModal").modal("hide");
@@ -427,9 +449,9 @@ onClick("#itemDropdownMenu .add-item-btn", function (e) {
   const row = $(this).closest(".item-select-row");
   const name = row.data("item-name");
 
-  // FIX 1: Retrieve data attribute string, which was set using item.itemPrice, and ensure it's a number
+  // Retrieve data attribute string, which was set using item.itemPrice, and ensure it's a number
   const priceString = row.data("item-price");
-  const price = parseFloat(priceString) || 0; // The 0 fallback is for safety, but priceString should now be correct
+  const price = parseFloat(priceString) || 0;
 
   const stock = parseInt(row.data("item-stock"));
 
