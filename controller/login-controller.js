@@ -2,6 +2,7 @@ import { getUsers } from "../model/user-model.js";
 import PinInputDTO from "./pin-input-controller.js";
 import { handleAuthentication } from "./auth-controller.js";
 import { sessionController } from "./session-controller.js";
+import displayDate from "../../utils/date-display.js";
 
 // Variables
 const pinNumbers = [7, 8, 9, 4, 5, 6, 1, 2, 3, "<-", 0, "->"];
@@ -10,16 +11,16 @@ let username;
 
 const loadLoginContent = () => {
   let userList = getUsers();
-  $("#userCard").empty();
+  $("#userCardWrapper").empty();
   userList.forEach((user) => {
-    $("#userCard").append(getUserCard(user));
+    $("#userCardWrapper").append(getuserCardWrapper(user));
   });
   displayPinNumbers();
   handlePinEntry();
   displayDate();
 };
 
-const getUserCard = (user) => {
+const getuserCardWrapper = (user) => {
   return `<button
                 class="btn btn-dark d-flex align-items-center gap-4 p-0 user-card-btn"
                 style="border-radius: 2rem;"
