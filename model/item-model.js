@@ -63,6 +63,22 @@ const updateItemStockQty = (orderedItems) => {
   });
 };
 
+const checkStockAvailability = (orderedItems) => {
+  for (const orderItem of orderedItems) {
+    const itemInStock = itemDB.find(
+      (stockItem) => stockItem.name === orderItem.name
+    );
+
+    // Check if item exists and if stock quantity is less than ordered quantity
+    if (!itemInStock || itemInStock.itemQty < orderItem.qty) {
+      // Return the name of the item that caused the failure
+      return orderItem.name;
+    }
+  }
+  // All checks passed
+  return true;
+};
+
 export {
   saveItem,
   updateItem,
@@ -72,4 +88,5 @@ export {
   getItemByName,
   getItemBySearchInput,
   updateItemStockQty,
+  checkStockAvailability,
 };

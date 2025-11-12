@@ -7,8 +7,12 @@ import {
   updateOrder,
 } from "../model/order-model.js";
 import { getCustomers, saveCustomer } from "../model/customer-model.js";
-// 💡 Correctly importing updateItemStockQty from item-model.js
-import { getItems, updateItemStockQty } from "../model/item-model.js";
+// 💡 Importing the new stock check function
+import {
+  getItems,
+  updateItemStockQty,
+  checkStockAvailability,
+} from "../model/item-model.js";
 import { onClick, onkeyDown } from "../utils/event-helper.js";
 import { displayToast } from "../utils/toast.js";
 import { OrderDTO } from "../dto/order-dto.js";
@@ -106,12 +110,36 @@ const getOrderCard = (order, index) => {
     </div>`;
 };
 
-const displayOrderCard = () => {
+/**
+ * Displays order cards, optionally filtered by status.
+ * @param {string} [filterStatus='All'] - The status to filter orders by (e.g., 'Paid', 'In Process', 'Not Paid').
+ */
+const displayOrderCard = (filterStatus = "All") => {
   $("#orderCardWrapper").empty();
-  const orders = getOrders();
-  orders.forEach((order, index) =>
-    $("#orderCardWrapper").append(getOrderCard(order, index))
+  const allOrders = getOrders();
+
+  let ordersToDisplay;
+  if (filterStatus === "All") {
+    ordersToDisplay = allOrders;
+  } else {
+    // Filter orders based on the requested status
+    ordersToDisplay = allOrders.filter(
+      (order) => order.orderStatus?.toLowerCase() === filterStatus.toLowerCase()
+    );
+  }
+
+  ordersToDisplay.forEach((order, index) =>
+    // We use the index in the original getOrders() array for data-order-index
+    // to ensure getOrderByIndex works correctly later.
+    $("#orderCardWrapper").append(getOrderCard(order, allOrders.indexOf(order)))
   );
+
+  // If filtered, update the order count visibility/message if needed
+  if (ordersToDisplay.length === 0 && filterStatus !== "All") {
+    $("#orderCardWrapper").html(
+      `<div class="col-12"><p class="text-center text-muted fs-5 mt-5">No ${filterStatus} orders found.</p></div>`
+    );
+  }
 };
 
 const updateItemDropdown = () => {
@@ -347,6 +375,7 @@ const handleSaveOrder = () => {
   let success = false;
   let message = "";
   let originalStatus = null;
+  let currentFilterStatus = $(".filter-btn.btn-light").data("status") || "All"; // Get currently active filter
 
   if (currentEditingIndex !== null) {
     // Get the original order status if editing an existing order
@@ -354,9 +383,40 @@ const handleSaveOrder = () => {
     originalStatus = originalOrder ? originalOrder.orderStatus : null;
 
     orderData.index = currentEditingIndex;
+
+    // --- CRUCIAL STOCK CHECK BEFORE UPDATING TO PAID ---
+    const isStatusChangeToPaid =
+      status.toLowerCase() === "paid" &&
+      originalStatus?.toLowerCase() !== "paid";
+
+    if (isStatusChangeToPaid) {
+      const stockCheckResult = checkStockAvailability(currentOrderItems);
+      if (stockCheckResult !== true) {
+        displayToast(
+          "error",
+          `Failed: ${stockCheckResult} is now out of stock.`
+        );
+        return; // Stop the save operation
+      }
+    }
+    // ---------------------------------------------------
+
     success = updateOrder(orderData);
     message = "Order updated successfully!";
   } else {
+    // --- CRUCIAL STOCK CHECK BEFORE SAVING NEW PAID ORDER ---
+    if (status.toLowerCase() === "paid") {
+      const stockCheckResult = checkStockAvailability(currentOrderItems);
+      if (stockCheckResult !== true) {
+        displayToast(
+          "error",
+          `Failed: ${stockCheckResult} is now out of stock.`
+        );
+        return; // Stop the save operation
+      }
+    }
+    // ---------------------------------------------------
+
     success = saveOrder(orderData);
     message = "New order saved successfully!";
   }
@@ -369,8 +429,9 @@ const handleSaveOrder = () => {
       const isNewOrder = currentEditingIndex === null;
       const isStatusChangeToPaid = originalStatus?.toLowerCase() !== "paid";
 
+      // If we made it this far, the stock check already passed, so we can deduct
       if (isNewOrder || isStatusChangeToPaid) {
-        // Calling the imported model function as requested
+        // Calling the imported model function to deduct stock
         updateItemStockQty(currentOrderItems);
 
         // Re-render the item dropdown to reflect the new stock levels
@@ -379,7 +440,8 @@ const handleSaveOrder = () => {
     }
 
     displayToast("success", message);
-    displayOrderCard();
+    // 💡 Re-display orders using the currently active filter status
+    displayOrderCard(currentFilterStatus);
     $("#orderDetailsModal").modal("hide");
   } else {
     displayToast("error", "Failed to save order.");
@@ -436,7 +498,8 @@ onClick(".delete-order-btn", function (e) {
   if (confirm("Are you sure you want to delete this order?")) {
     if (deleteOrder(index)) {
       displayToast("success", "Order deleted successfully!");
-      displayOrderCard();
+      // Re-display orders using the currently active filter status
+      displayOrderCard($(".filter-btn.btn-light").data("status") || "All");
     } else {
       displayToast("error", "Failed to delete order!");
     }
@@ -530,14 +593,33 @@ onClick("#saveCustomerBtn", function () {
 onkeyDown("#searchOrderInput", (e) => {
   const value = $("#searchOrderInput").val();
   if (e.key === "Backspace" || !value) {
-    displayOrderCard();
+    // When search is cleared, use the current filter status
+    displayOrderCard($(".filter-btn.btn-light").data("status") || "All");
   } else {
     const results = getOrderBySearchInput(value);
     $("#orderCardWrapper").empty();
+    // Note: Search results are not filtered by status tabs here, just displayed
     results.forEach((order, index) =>
       $("#orderCardWrapper").append(getOrderCard(order, index))
     );
   }
+});
+
+// ⭐ Filter Button Handler
+onClick(".filter-btn", function () {
+  // 1. Get the status to filter by
+  const status = $(this).data("status");
+
+  // 2. Update button styling (active state)
+  $(".filter-btn")
+    .removeClass("btn-light text-dark")
+    .addClass("btn-outline-secondary text-white");
+  $(this)
+    .removeClass("btn-outline-secondary text-white")
+    .addClass("btn-light text-dark");
+
+  // 3. Display filtered cards
+  displayOrderCard(status);
 });
 
 export { displayOrderCard };
