@@ -6,33 +6,29 @@ import {
   saveOrder,
   updateOrder,
 } from "../model/order-model.js";
-
 import {
   getCustomers,
-  getCustomerByIndex,
   saveCustomer,
-} from "../model/customer-model.js";
-import { getItems, getItemByIndex } from "../model/item-model.js";
+  getItems,
+} from "../mock-data/mock-data.js";
 import { onClick, onkeyDown } from "../utils/event-helper.js";
 import { displayToast } from "../utils/toast.js";
+import { OrderDTO } from "../dto/order-dto.js";
 
 let currentEditingIndex = null;
 let isEditMode = false;
-let selectedPaymentMethod = "Wallet";
-let selectedCustomer = null;
-let selectedItems = [];
+let currentOrderItems = [];
 
 const calculateTotal = (orderedItems) => {
-  const cents = orderedItems.reduce((sum, item) => {
-    const itemCents = Math.round(Number(item.price) * 100);
-    return sum + itemCents * Number(item.qty);
-  }, 0);
-  return (cents / 100).toFixed(2);
+  if (!orderedItems || orderedItems.length === 0) return "0.00";
+  return orderedItems
+    .reduce((sum, item) => sum + item.price * item.qty, 0)
+    .toFixed(2);
 };
 
 const getStatusBadge = (status) => {
   let badgeColor, badgeText, badgeIcon;
-  switch ((status || "").toLowerCase()) {
+  switch (status?.toLowerCase()) {
     case "paid":
       badgeColor = "#c9e6c2";
       badgeIcon = "✓";
@@ -42,11 +38,6 @@ const getStatusBadge = (status) => {
       badgeColor = "#f6e7b1";
       badgeIcon = "⧗";
       badgeText = "In Process";
-      break;
-    case "cancelled":
-      badgeColor = "#e0bfcf";
-      badgeIcon = "✕";
-      badgeText = "Cancelled";
       break;
     default:
       badgeColor = "#f0c8cf";
@@ -58,13 +49,16 @@ const getStatusBadge = (status) => {
 };
 
 const getOrderItemsTableRows = (orderedItems) => {
+  if (!orderedItems || orderedItems.length === 0) {
+    return '<tr><td colspan="3" class="text-center text-muted small">No items</td></tr>';
+  }
   return orderedItems
     .map(
       (item) => `
     <tr>
-      <td>${String(item.qty).padStart(2, "0")}</td>
+      <td>${item.qty < 10 ? "0" : ""}${item.qty}</td>
       <td>${item.name}</td>
-      <td class="text-end">$${Number(item.price).toFixed(2)}</td>
+      <td class="text-end">$${(item.price * item.qty).toFixed(2)}</td>
     </tr>`
     )
     .join("");
@@ -78,7 +72,7 @@ const getOrderCard = (order, index) => {
 
   return `
     <div class="col-md-6 col-lg-4">
-      <div class="card bg-dark border-0 text-white rounded-3 shadow-sm p-3 order-card" 
+      <div class="card bg-dark border-0 text-white rounded-3 shadow-sm p-3 order-card"
         style="background-color: #1b1d1e"
         data-order-index="${index}"
         data-bs-toggle="modal"
@@ -104,74 +98,60 @@ const getOrderCard = (order, index) => {
           <p class="fw-semibold mb-0">$${total}</p>
         </div>
         <div class="d-flex flex-row justify-content-between align-items-center mt-3">
-          <button class="btn border-0 text-white p-2 edit-order-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button class="btn border-0 text-white p-2 edit-order-btn" style="pointer-events: none; opacity: 0;"><i class="fa-solid fa-pen-to-square"></i></button>
           <button class="btn border-0 text-white p-2 delete-order-btn" data-order-index="${index}"><i class="fa-solid fa-trash"></i></button>
           <button class="btn flex-grow-1 text-dark fw-semibold py-2 border-0" style="background-color: #c9caee"
-            data-bs-toggle="modal" data-bs-target="#orderDetailsModal">Pay Bill</button>
+            data-bs-toggle="modal" data-bs-target="#orderDetailsModal">View Order</button>
         </div>
       </div>
     </div>`;
 };
 
-const displayOrderCard = (filterStatus = null) => {
+const displayOrderCard = () => {
   $("#orderCardWrapper").empty();
   const orders = getOrders();
-  const filtered = filterStatus
-    ? orders.filter(
-        (o) =>
-          (o.orderStatus || "").toLowerCase() === filterStatus.toLowerCase()
-      )
-    : orders;
-  filtered.forEach((order, index) =>
+  orders.forEach((order, index) =>
     $("#orderCardWrapper").append(getOrderCard(order, index))
   );
 };
 
-const loadCustomerSelect = () => {
-  const customers = getCustomers();
-  const select = $("#customerSelect");
-  select.empty();
-  select.append('<option value="">-- Select Customer --</option>');
-  customers.forEach((c, i) =>
-    select.append(`<option value="${i}">${c.name} - ${c.email || ""}</option>`)
-  );
-};
-
-const loadItemSelect = () => {
+const updateItemDropdown = () => {
+  const itemMenu = $("#itemDropdownMenu");
+  itemMenu.empty();
   const items = getItems();
-  const select = $("#itemSelect");
-  select.empty();
-  items.forEach((item, i) =>
-    select.append(
-      `<option value="${i}">${item.name} - $${Number(item.price).toFixed(
-        2
-      )}</option>`
-    )
-  );
+  items.forEach((item) => {
+    const isAdded = currentOrderItems.some(
+      (orderItem) => orderItem.name === item.name
+    );
+    const itemRow = `
+      <div class="d-flex justify-content-between align-items-center px-2 py-2 dropdown-item bg-dark text-white rounded-3 item-select-row"
+        data-item-name="${item.name}" data-item-price="${
+      item.price
+    }" data-item-stock="${item.stock}">
+        <div class="d-flex flex-column">
+          <div class="fw-semibold">${item.name}</div>
+          <div class="small text-muted">$${item.price.toFixed(2)}</div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <div class="small text-muted">Stock: ${item.stock}</div>
+          <button class="btn btn-sm ${
+            isAdded ? "btn-outline-secondary" : "btn-success"
+          } add-item-btn" ${isAdded ? "disabled" : ""}>
+            ${isAdded ? "Added" : '<i class="fa-solid fa-plus"></i>'}
+          </button>
+        </div>
+      </div>`;
+    itemMenu.append(itemRow);
+  });
 };
 
-const loadOrderDetailsModal = (order, index = null) => {
-  selectedCustomer =
-    getCustomers().find((c) => c.name === order.customerName) || null;
-  selectedItems = (order.orderedItems || []).map((i) => ({ ...i }));
-  selectedPaymentMethod = order.paymentMethod || "Wallet";
-  currentEditingIndex = index;
-
-  $("#orderDetailsModalLabel").text(
-    order.orderId
-      ? `Order ${order.orderId}`
-      : index !== null
-      ? `Order ${(index + 1).toString().padStart(2, "0")}`
-      : "Order"
-  );
-  $("#modalCustomerName").text(
-    selectedCustomer ? selectedCustomer.name : "Select Customer"
-  );
-
-  const itemsHTML = selectedItems
+const renderItemsList = () => {
+  const itemsHTML = currentOrderItems
     .map(
       (item, idx) => `
-      <div class="d-flex justify-content-between align-items-center rounded-3 p-3 position-relative" style="background-color: #2a2c2d">
+      <div class="d-flex justify-content-between align-items-center rounded-3 p-3 item-row" style="background-color: #2a2c2d" data-item-name="${
+        item.name
+      }">
         <div class="d-flex align-items-center gap-3">
           <div class="rounded-3 d-flex align-items-center justify-content-center"
             style="width: 40px; height: 40px; background-color: #dbeaf5; color: #081018; font-weight: 700;">
@@ -182,85 +162,217 @@ const loadOrderDetailsModal = (order, index = null) => {
             <div class="small text-muted">x ${item.qty}</div>
           </div>
         </div>
-        <div class="fw-semibold me-4">$${Number(item.price).toFixed(2)}</div>
-        <button class="btn btn-sm border-0 text-danger position-absolute end-0 me-2 ${
-          isEditMode ? "" : "d-none"
-        } delete-item-btn"><i class="fa-solid fa-trash"></i></button>
+        <div class="d-flex align-items-center gap-2">
+          <div class="fw-semibold">$${(item.qty * item.price).toFixed(2)}</div>
+          <button class="btn btn-sm border-0 text-danger delete-item-btn" data-item-name="${
+            item.name
+          }" style="${isEditMode ? "" : "display:none;"}">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
       </div>`
     )
     .join("");
 
-  $("#modalItemsList").html(itemsHTML);
+  $("#modalItemsList").html(
+    itemsHTML ||
+      '<p class="text-center text-muted small mt-2">No items added to the order.</p>'
+  );
 
-  const subtotal = calculateTotal(selectedItems);
-  $("#modalSubtotal div:last-child").text(`$${subtotal}`);
-  $("#modalTotal div:last-child").text(`$${subtotal}`);
-  $("#modalReceived div:last-child").text(`$${subtotal}`);
+  const subtotal = calculateTotal(currentOrderItems);
+  $("#modalSubtotal").text(`$${subtotal}`);
+  $("#modalTotal").text(`$${subtotal}`);
+  $("#modalReceived").text(`$${subtotal}`);
 
-  $(".payment-btn").each(function () {
-    const method = $(this).data("method");
-    if (method === selectedPaymentMethod) {
+  updateItemDropdown();
+};
+
+const setPaymentMethod = (methodName) => {
+  $("#paymentMethodWrapper .payment-btn").each(function () {
+    const btnMethod = $(this).data("method");
+    const isActive = btnMethod === methodName;
+    $(this).toggleClass("active", isActive);
+    if (isActive) {
       $(this)
-        .removeClass("bg-transparent border text-white")
-        .addClass("btn-light text-dark")
-        .attr("style", "");
+        .css("background-color", "#c9caee")
+        .css("color", "#111")
+        .css("border-color", "#c9caee");
     } else {
       $(this)
-        .removeClass("btn-light text-dark")
-        .addClass("bg-transparent border text-white")
-        .attr("style", "border-color: #3a3c3d");
+        .css("background-color", "transparent")
+        .css("color", "white")
+        .css("border-color", "#3a3c3d");
     }
   });
+};
 
-  $("#orderStatusSelect").val(order.orderStatus || "not paid");
+const loadOrderDetailsModal = (order) => {
+  isEditMode = !!order;
+  currentOrderItems = order ? [...order.orderedItems] : [];
+  currentEditingIndex = order ? getOrders().indexOf(order) : null;
+  const customers = getCustomers();
 
-  if (isEditMode) {
-    $("#editOrderBtn").addClass("btn-warning");
+  // Populate Customer Select
+  $("#customerSelect").html(
+    customers
+      .map(
+        (c) =>
+          `<option value="${c.id}" data-email="${c.email}">${c.name}</option>`
+      )
+      .join("")
+  );
+
+  // Populate Order Status Select
+  $("#orderStatusSelect").html(
+    [
+      '<option value="In Process">In Process</option>',
+      '<option value="Paid">Paid</option>',
+      '<option value="Not Paid">Not Paid</option>',
+    ].join("")
+  );
+
+  // Update Modal Header and State
+  if (order) {
+    const selectedCustomer =
+      customers.find((c) => c.name === order.customerName) || customers[0];
+
+    $("#orderDetailsModalLabel").text(
+      `Order ${(currentEditingIndex + 1).toString().padStart(2, "0")}`
+    );
+    $("#modalCustomerName").html(
+      `<span id="modalCustomerNameText">${
+        order.customerName
+      }</span><div class="small text-muted">${order.customerEmail || ""}</div>`
+    );
+    $("#customerSelect")
+      .val(selectedCustomer ? selectedCustomer.id : customers[0].id)
+      .prop("disabled", !isEditMode);
+    $("#orderStatusSelect")
+      .val(order.orderStatus)
+      .prop("disabled", !isEditMode);
+    setPaymentMethod(order.paymentMethod || "Wallet");
+    $("#saveOrderBtn").text("Update Order");
+    $("#editOrderBtn").removeClass("d-none");
   } else {
-    $("#editOrderBtn").removeClass("btn-warning");
+    // New Order State
+    $("#orderDetailsModalLabel").text("New Order");
+    $("#modalCustomerName").html(`Select Customer to begin`);
+    $("#customerSelect").prop("disabled", false).val(customers[0].id);
+    $("#orderStatusSelect").val("In Process").prop("disabled", false);
+    setPaymentMethod("Wallet");
+    $("#saveOrderBtn").text("Save New Order");
+    $("#editOrderBtn").addClass("d-none");
+  }
+
+  // Disable inputs if not in edit mode
+  const disabledAttr = isEditMode ? "" : "disabled";
+  $(
+    "#customerSelect, #orderStatusSelect, #itemDropdownButton, #addCustomerBtn"
+  ).prop("disabled", !isEditMode);
+  $("#paymentMethodWrapper .payment-btn").prop("disabled", !isEditMode);
+  $("#itemDropdownButton").text(isEditMode ? "Select Items" : "View Items");
+
+  renderItemsList();
+};
+
+const handleSaveOrder = () => {
+  const customerId = $("#customerSelect").val();
+  const selectedCustomer = getCustomers().find((c) => c.id == customerId);
+  const status = $("#orderStatusSelect").val();
+  const paymentMethod = $("#paymentMethodWrapper .payment-btn.active").data(
+    "method"
+  );
+
+  if (!selectedCustomer) {
+    displayToast("error", "Please select a customer.");
+    return;
+  }
+  if (currentOrderItems.length === 0) {
+    displayToast("error", "Order must contain at least one item.");
+    return;
+  }
+
+  const now = new Date();
+  const orderData = {
+    customerName: selectedCustomer.name,
+    customerEmail: selectedCustomer.email,
+    orderDate: now.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
+    orderTime: now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+    orderStatus: status,
+    orderedItems: currentOrderItems,
+    paymentMethod: paymentMethod,
+  };
+
+  let success = false;
+  let message = "";
+
+  if (currentEditingIndex !== null) {
+    orderData.index = currentEditingIndex;
+    success = updateOrder(orderData);
+    message = "Order updated successfully!";
+  } else {
+    success = saveOrder(orderData);
+    message = "New order saved successfully!";
+  }
+
+  if (success) {
+    displayToast("success", message);
+    displayOrderCard();
+    $("#orderDetailsModal").modal("hide");
+  } else {
+    displayToast("error", "Failed to save order.");
   }
 };
+
+// --- Event Listeners ---
 
 onClick(".order-card", function () {
   const index = $(this).data("order-index");
   const order = getOrderByIndex(index);
-  currentEditingIndex = index;
-  isEditMode = false;
-  loadCustomerSelect();
-  loadItemSelect();
-  loadOrderDetailsModal(order, index);
+  loadOrderDetailsModal(order);
 });
 
-onClick(".edit-order-btn", function (e) {
-  e.stopPropagation();
-  const wrapper = $(this).closest(".order-card");
-  const idx = wrapper.data("order-index");
-  const order = getOrderByIndex(idx);
-  isEditMode = true;
-  currentEditingIndex = idx;
-  loadCustomerSelect();
-  loadItemSelect();
-  loadOrderDetailsModal(order, idx);
-  $("#orderDetailsModal").modal("show");
+onClick("#addOrderBtn", function () {
+  loadOrderDetailsModal(null);
 });
 
 onClick("#editOrderBtn", function () {
   isEditMode = !isEditMode;
-  $("#modalItemsList .delete-item-btn").toggleClass("d-none", !isEditMode);
-  $("#customerSelect").prop("disabled", !isEditMode);
-  $("#itemSelect").prop("disabled", !isEditMode);
-  $("#orderStatusSelect").prop("disabled", !isEditMode);
-});
+  $(this).find("i").toggleClass("fa-pen fa-check");
+  $(
+    "#customerSelect, #orderStatusSelect, #itemDropdownButton, #addCustomerBtn"
+  ).prop("disabled", !isEditMode);
+  $("#paymentMethodWrapper .payment-btn").prop("disabled", !isEditMode);
+  $("#saveOrderBtn")
+    .prop("disabled", !isEditMode)
+    .text(isEditMode ? "Update Order" : "Order Completed");
 
-onClick(".delete-item-btn", function (e) {
-  e.stopPropagation();
-  const idx = $(this).closest(".rounded-3").index();
-  selectedItems.splice(idx, 1);
-  $(this).closest(".rounded-3").remove();
-  const total = calculateTotal(selectedItems);
-  $("#modalSubtotal div:last-child").text(`$${total}`);
-  $("#modalTotal div:last-child").text(`$${total}`);
-  $("#modalReceived div:last-child").text(`$${total}`);
+  $("#modalItemsList .delete-item-btn").css(
+    "display",
+    isEditMode ? "" : "none"
+  );
+  $("#itemDropdownButton").text(isEditMode ? "Select Items" : "View Items");
+
+  if (isEditMode) {
+    $("#modalCustomerName").html(`
+      <span id="modalCustomerNameText">${
+        getOrderByIndex(currentEditingIndex).customerName
+      }</span>
+      <div class="small text-muted">${
+        getOrderByIndex(currentEditingIndex).customerEmail
+      }</div>
+    `);
+  } else {
+    // If exiting edit mode, revert items list display to non-editable
+    renderItemsList();
+  }
 });
 
 onClick(".delete-order-btn", function (e) {
@@ -276,9 +388,83 @@ onClick(".delete-order-btn", function (e) {
   }
 });
 
+onClick("#itemDropdownMenu .add-item-btn", function (e) {
+  e.preventDefault();
+  const row = $(this).closest(".item-select-row");
+  const name = row.data("item-name");
+  const price = parseFloat(row.data("item-price"));
+  const stock = parseInt(row.data("item-stock"));
+
+  if (stock <= 0) {
+    displayToast("error", `Item ${name} is out of stock.`);
+    return;
+  }
+
+  // Check if item already exists in current order
+  let existingItem = currentOrderItems.find((item) => item.name === name);
+  if (existingItem) {
+    existingItem.qty += 1;
+  } else {
+    currentOrderItems.push({ name, qty: 1, price });
+  }
+
+  renderItemsList();
+  displayToast("success", `${name} added to order!`);
+});
+
+onClick(".delete-item-btn", function (e) {
+  e.preventDefault();
+  const itemName = $(this).data("item-name");
+  currentOrderItems = currentOrderItems.filter(
+    (item) => item.name !== itemName
+  );
+  renderItemsList();
+  displayToast("success", "Item removed successfully!");
+});
+
+onClick("#paymentMethodWrapper .payment-btn", function (e) {
+  e.preventDefault();
+  const method = $(this).data("method");
+  setPaymentMethod(method);
+});
+
+onClick("#saveOrderBtn", handleSaveOrder);
+
+onClick("#saveCustomerBtn", function () {
+  const name = $("#newCustomerName").val().trim();
+  const email = $("#newCustomerEmail").val().trim();
+
+  if (!name) {
+    displayToast("error", "Customer name cannot be empty.");
+    return;
+  }
+
+  if (saveCustomer({ name, email })) {
+    displayToast("success", "Customer saved! Please select from the dropdown.");
+    $("#addCustomerModal").modal("hide");
+
+    // Refresh the order modal state to update the customer dropdown
+    const customers = getCustomers();
+    $("#customerSelect").html(
+      customers
+        .map(
+          (c) =>
+            `<option value="${c.id}" data-email="${c.email}">${c.name}</option>`
+        )
+        .join("")
+    );
+    $("#customerSelect").val(customers[customers.length - 1].id);
+
+    // Ensure the main order modal is still open
+    $("#orderDetailsModal").modal("show");
+  } else {
+    displayToast("error", "Failed to save customer.");
+  }
+});
+
 onkeyDown("#searchOrderInput", (e) => {
   const value = $("#searchOrderInput").val();
-  if (!value) {
+  if (e.key === "Backspace" || !value) {
     displayOrderCard();
   } else {
     const results = getOrderBySearchInput(value);
@@ -287,193 +473,6 @@ onkeyDown("#searchOrderInput", (e) => {
       $("#orderCardWrapper").append(getOrderCard(order, index))
     );
   }
-});
-
-onClick("#addOrderBtn", function () {
-  currentEditingIndex = null;
-  isEditMode = true;
-  selectedCustomer = null;
-  selectedItems = [];
-  selectedPaymentMethod = "Wallet";
-
-  $("#orderDetailsModalLabel").text("New Order");
-  $("#modalCustomerName").text("Select Customer");
-  $("#modalItemsList").html("");
-  $("#modalSubtotal div:last-child").text("$0.00");
-  $("#modalTotal div:last-child").text("$0.00");
-  $("#modalReceived div:last-child").text("$0.00");
-
-  $(".payment-btn")
-    .removeClass("btn-light text-dark")
-    .addClass("bg-transparent border text-white")
-    .attr("style", "border-color: #3a3c3d");
-  $(`.payment-btn[data-method="Wallet"]`)
-    .removeClass("bg-transparent border text-white")
-    .addClass("btn-light text-dark")
-    .attr("style", "");
-
-  loadCustomerSelect();
-  loadItemSelect();
-  $("#customerSelect").prop("disabled", false);
-  $("#itemSelect").prop("disabled", false);
-  $("#orderStatusSelect").prop("disabled", false);
-  $("#orderDetailsModal").modal("show");
-});
-
-$("#customerSelect").on("change", function () {
-  const index = $(this).val();
-  if (index === "") {
-    selectedCustomer = null;
-    $("#modalCustomerName").text("Select Customer");
-  } else {
-    selectedCustomer = getCustomerByIndex(index);
-    $("#modalCustomerName").text(selectedCustomer.name);
-  }
-});
-
-$("#itemSelect").on("change", function () {
-  const selectedIndices = $(this).val() || [];
-  selectedItems = selectedIndices.map((i) => {
-    const item = getItemByIndex(i);
-    return { ...item, qty: 1 };
-  });
-
-  const listHTML = selectedItems
-    .map(
-      (item, idx) => `
-      <div class="d-flex justify-content-between align-items-center rounded-3 p-3" style="background-color:#2a2c2d">
-        <div class="d-flex align-items-center gap-3">
-          <div class="rounded-3 d-flex align-items-center justify-content-center"
-            style="width:40px;height:40px;background-color:#dbeaf5;color:#081018;font-weight:700;">
-            ${(idx + 1).toString().padStart(2, "0")}
-          </div>
-          <div>
-            <div class="fw-semibold">${item.name}</div>
-            <div class="small text-muted">x ${item.qty}</div>
-          </div>
-        </div>
-        <div class="fw-semibold me-4">$${Number(item.price).toFixed(2)}</div>
-      </div>`
-    )
-    .join("");
-
-  $("#modalItemsList").html(listHTML);
-
-  const total = calculateTotal(selectedItems);
-  $("#modalSubtotal div:last-child").text(`$${total}`);
-  $("#modalTotal div:last-child").text(`$${total}`);
-  $("#modalReceived div:last-child").text(`$${total}`);
-});
-
-onClick(".payment-btn", function () {
-  $(".payment-btn").each(function () {
-    $(this)
-      .removeClass("btn-light text-dark")
-      .addClass("bg-transparent border text-white")
-      .attr("style", "border-color: #3a3c3d");
-  });
-  $(this)
-    .removeClass("bg-transparent border text-white")
-    .addClass("btn-light text-dark")
-    .attr("style", "");
-  selectedPaymentMethod = $(this).data("method");
-});
-
-onClick("#saveOrderBtn", function () {
-  if (!selectedCustomer)
-    return displayToast("error", "Please select a customer!");
-  if (selectedItems.length === 0)
-    return displayToast("error", "Please select at least one item!");
-
-  const orderData = {
-    customerName: selectedCustomer.name,
-    customerEmail: selectedCustomer.email,
-    orderDate: new Date().toLocaleDateString(),
-    orderTime: new Date().toLocaleTimeString(),
-    orderStatus: $("#orderStatusSelect").val() || "not paid",
-    orderedItems: selectedItems,
-    paymentMethod: selectedPaymentMethod || "Wallet",
-  };
-
-  if (
-    isEditMode &&
-    currentEditingIndex !== null &&
-    currentEditingIndex !== undefined
-  ) {
-    const updatedOrder = {
-      index: currentEditingIndex,
-      ...orderData,
-    };
-    if (updateOrder(updatedOrder)) {
-      displayToast("success", "Order updated!");
-      displayOrderCard();
-      $("#orderDetailsModal").modal("hide");
-    } else {
-      displayToast("error", "Failed to update order!");
-    }
-  } else {
-    if (saveOrder(orderData)) {
-      displayToast("success", "New order added!");
-      displayOrderCard();
-      $("#orderDetailsModal").modal("hide");
-    } else {
-      displayToast("error", "Failed to save order!");
-    }
-  }
-});
-
-onClick("#saveCustomerBtn", function () {
-  const name = $("#newCustomerName").val().trim();
-  const email = $("#newCustomerEmail").val().trim();
-  if (!name) return displayToast("error", "Customer name required");
-  const c = { name, email };
-  if (saveCustomer && typeof saveCustomer === "function") {
-    saveCustomer(c);
-    displayToast("success", "Customer added");
-    $("#addCustomerModal").modal("hide");
-    $("#newCustomerName").val("");
-    $("#newCustomerEmail").val("");
-    loadCustomerSelect();
-  } else {
-    displayToast("error", "Unable to add customer");
-  }
-});
-
-onClick("#filterAll", function () {
-  $("#filterAll")
-    .removeClass("btn-outline-secondary text-white")
-    .addClass("btn-light text-dark");
-  $("#filterInProcess,#filterCompleted,#filterCancelled")
-    .removeClass("btn-light text-dark")
-    .addClass("btn-outline-secondary text-white");
-  displayOrderCard();
-});
-onClick("#filterInProcess", function () {
-  $("#filterInProcess")
-    .removeClass("btn-outline-secondary text-white")
-    .addClass("btn-light text-dark");
-  $("#filterAll,#filterCompleted,#filterCancelled")
-    .removeClass("btn-light text-dark")
-    .addClass("btn-outline-secondary text-white");
-  displayOrderCard("in process");
-});
-onClick("#filterCompleted", function () {
-  $("#filterCompleted")
-    .removeClass("btn-outline-secondary text-white")
-    .addClass("btn-light text-dark");
-  $("#filterAll,#filterInProcess,#filterCancelled")
-    .removeClass("btn-light text-dark")
-    .addClass("btn-outline-secondary text-white");
-  displayOrderCard("paid");
-});
-onClick("#filterCancelled", function () {
-  $("#filterCancelled")
-    .removeClass("btn-outline-secondary text-white")
-    .addClass("btn-light text-dark");
-  $("#filterAll,#filterInProcess,#filterCompleted")
-    .removeClass("btn-light text-dark")
-    .addClass("btn-outline-secondary text-white");
-  displayOrderCard("cancelled");
 });
 
 export { displayOrderCard };

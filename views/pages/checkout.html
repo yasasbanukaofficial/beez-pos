@@ -1,4 +1,5 @@
 <div class="text-white d-flex flex-column gap-5 pt-lg-4">
+  <!-- Header -->
   <div class="d-flex flex-row justify-content-between align-items-center pe-3">
     <div class="d-flex flex-row align-items-center">
       <button
@@ -17,37 +18,28 @@
     </p>
   </div>
 
+  <!-- Filter Tabs -->
   <div class="d-flex flex-row align-items-center gap-3 pe-3">
-    <button
-      id="filterAll"
-      class="btn btn-light text-dark fw-semibold px-4 py-2 rounded-3"
-    >
+    <button class="btn btn-light text-dark fw-semibold px-4 py-2 rounded-3">
       All
     </button>
-    <button
-      id="filterInProcess"
-      class="btn btn-outline-secondary text-white px-4 py-2 rounded-3"
-    >
+    <button class="btn btn-outline-secondary text-white px-4 py-2 rounded-3">
       In Process
     </button>
-    <button
-      id="filterCompleted"
-      class="btn btn-outline-secondary text-white px-4 py-2 rounded-3"
-    >
+    <button class="btn btn-outline-secondary text-white px-4 py-2 rounded-3">
       Completed
     </button>
-    <button
-      id="filterCancelled"
-      class="btn btn-outline-secondary text-white px-4 py-2 rounded-3"
-    >
+    <button class="btn btn-outline-secondary text-white px-4 py-2 rounded-3">
       Cancelled
     </button>
 
     <div class="ms-auto d-flex flex-row align-items-center gap-3">
       <button
-        id="addOrderBtn"
         class="btn rounded-pill fw-semibold px-4 py-2 text-dark border-0"
         style="background-color: #c9caee"
+        id="addOrderBtn"
+        data-bs-toggle="modal"
+        data-bs-target="#orderDetailsModal"
       >
         Add an Order
       </button>
@@ -57,6 +49,7 @@
           type="text"
           class="form-control bg-dark text-white rounded-3 ps-3 pe-5 py-3 border-0"
           placeholder="Search an Order"
+          aria-label="Search an Order"
           id="searchOrderInput"
         />
         <button
@@ -65,16 +58,17 @@
         >
           <i
             class="fa-solid fa-magnifying-glass px-2"
-            style="color: #3d4142"
+            style="background-color: transparent; color: #3d4142"
           ></i>
         </button>
       </div>
     </div>
   </div>
 
+  <!-- Order Cards -->
   <div class="row g-4 pe-lg-4" id="orderCardWrapper"></div>
 
-  <!-- Order Details Modal -->
+  <!-- MODERN ORDER DETAILS MODAL -->
   <div
     class="modal fade"
     id="orderDetailsModal"
@@ -85,7 +79,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div
         class="modal-content bg-dark text-white rounded-3 shadow-lg p-3"
-        style="max-width: 420px; margin: auto"
+        style="max-width: 480px; margin: auto"
       >
         <div class="modal-header border-0">
           <div>
@@ -104,6 +98,7 @@
         </div>
 
         <div class="modal-body pt-0 px-3 pb-3">
+          <!-- Customer Selection -->
           <div class="mb-3">
             <label class="form-label text-muted small">Select Customer</label>
             <div class="d-flex gap-2">
@@ -122,61 +117,66 @@
             </div>
           </div>
 
+          <!-- Item Selection Modernized -->
           <div class="mb-3">
             <label class="form-label text-muted small">Select Items</label>
-            <select
-              id="itemSelect"
-              multiple
-              class="form-select bg-dark text-white border-secondary"
-              style="height: 120px"
-            ></select>
-            <div class="small text-muted mt-1">
-              Hold Ctrl/Cmd (or Shift) to select multiple
+            <div class="dropdown">
+              <button
+                class="btn btn-dark w-100 text-start dropdown-toggle border-secondary"
+                type="button"
+                id="itemDropdownButton"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Select Items
+              </button>
+              <div
+                class="dropdown-menu w-100 bg-dark p-2 border-secondary"
+                id="itemDropdownMenu"
+                style="max-height: 200px; overflow-y: auto"
+              >
+                <!-- Populated dynamically via JS -->
+              </div>
             </div>
           </div>
 
-          <div id="modalItemsList" class="d-flex flex-column gap-2 mb-4"></div>
+          <!-- Cart / Selected Items -->
+          <div id="modalItemsList" class="d-flex flex-column gap-2 mb-4">
+            <!-- Dynamically populated rows with item name, qty, price and remove button -->
+          </div>
 
+          <!-- Totals -->
           <div class="rounded-3 p-3 mb-4" style="background-color: #2a2c2d">
-            <div
-              class="d-flex justify-content-between small text-muted mb-3"
-              id="modalSubtotal"
-            >
+            <div class="d-flex justify-content-between small text-muted mb-3">
               <div>Subtotal</div>
-              <div>$0.00</div>
+              <div id="modalSubtotal">$0.00</div>
             </div>
-            <div
-              class="d-flex justify-content-between fw-semibold mb-2"
-              id="modalTotal"
-            >
+            <div class="d-flex justify-content-between fw-semibold mb-2">
               <div>Total</div>
-              <div>$0.00</div>
+              <div id="modalTotal">$0.00</div>
             </div>
             <hr style="border-style: dashed; border-color: #3a3c3d" />
-            <div
-              class="d-flex justify-content-between small text-muted mt-2"
-              id="modalReceived"
-            >
+            <div class="d-flex justify-content-between small text-muted mt-2">
               <div>Received</div>
-              <div>$0.00</div>
+              <div id="modalReceived">$0.00</div>
             </div>
           </div>
 
+          <!-- Order Status -->
           <div class="mb-3">
             <label class="form-label text-muted small">Order Status</label>
             <select
               id="orderStatusSelect"
               class="form-select bg-dark text-white border-secondary"
-            >
-              <option value="not paid">Not Paid</option>
-              <option value="in process">In Process</option>
-              <option value="paid">Paid</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
+            ></select>
           </div>
 
+          <!-- Payment Methods -->
           <p class="fw-semibold mb-2">Payment Method</p>
-          <div class="d-flex justify-content-between mb-3 gap-2 flex-wrap">
+          <div
+            class="d-flex justify-content-between mb-3 gap-2 flex-wrap"
+            id="paymentMethodWrapper"
+          >
             <button
               class="btn bg-transparent border text-white flex-fill d-flex align-items-center justify-content-center gap-2 py-3 payment-btn"
               data-method="Cash"
@@ -213,9 +213,14 @@
   </div>
 
   <!-- ADD CUSTOMER MODAL -->
-  <div class="modal fade" id="addCustomerModal" tabindex="-1">
+  <div
+    class="modal fade"
+    id="addCustomerModal"
+    tabindex="-1"
+    aria-hidden="true"
+  >
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-dark text-white rounded-3 shadow-lg p-3">
+      <div class="modal-content bg-dark text-white rounded-3 shadow-lg p-4">
         <h5 class="fw-bold mb-3">Add Customer</h5>
         <div class="mb-3">
           <label class="form-label small text-muted">Name</label>

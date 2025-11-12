@@ -1,12 +1,14 @@
 export class OrderDTO {
+  // Private fields
   #customerName;
   #customerEmail;
   #orderDate;
   #orderTime;
-  #orderStatus;
-  #orderedItems;
-  #paymentMethod;
+  #orderStatus; // paid, in process, not paid
+  #orderedItems; // [{ name: "Macbook", qty: 1, price: 600 }, ...]
+  #paymentMethod; // Cash, Debit, Wallet
 
+  // Constructor
   constructor(
     customerName,
     customerEmail,
@@ -25,9 +27,11 @@ export class OrderDTO {
     this.#paymentMethod = paymentMethod;
   }
 
+  // Getters and Setters
   get customerName() {
     return this.#customerName;
   }
+
   set customerName(name) {
     this.#customerName = name;
   }
@@ -35,6 +39,7 @@ export class OrderDTO {
   get customerEmail() {
     return this.#customerEmail;
   }
+
   set customerEmail(email) {
     this.#customerEmail = email;
   }
@@ -42,6 +47,7 @@ export class OrderDTO {
   get orderDate() {
     return this.#orderDate;
   }
+
   set orderDate(date) {
     this.#orderDate = date;
   }
@@ -49,6 +55,7 @@ export class OrderDTO {
   get orderTime() {
     return this.#orderTime;
   }
+
   set orderTime(time) {
     this.#orderTime = time;
   }
@@ -56,6 +63,7 @@ export class OrderDTO {
   get orderStatus() {
     return this.#orderStatus;
   }
+
   set orderStatus(status) {
     this.#orderStatus = status;
   }
@@ -63,6 +71,7 @@ export class OrderDTO {
   get orderedItems() {
     return this.#orderedItems;
   }
+
   set orderedItems(items) {
     this.#orderedItems = items;
   }
@@ -70,6 +79,7 @@ export class OrderDTO {
   get paymentMethod() {
     return this.#paymentMethod;
   }
+
   set paymentMethod(method) {
     this.#paymentMethod = method;
   }

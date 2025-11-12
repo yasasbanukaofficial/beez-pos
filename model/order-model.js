@@ -20,28 +20,34 @@ const updateOrder = (updatedOrder) => {
   if (updatedOrder.index < 0 || updatedOrder.index >= orderDB.length)
     return false;
 
-  orderDB[updatedOrder.index] = {
-    customerName: updatedOrder.customerName,
-    customerEmail: updatedOrder.customerEmail,
-    orderDate: updatedOrder.orderDate,
-    orderTime: updatedOrder.orderTime,
-    orderStatus: updatedOrder.orderStatus,
-    orderedItems: updatedOrder.orderedItems,
-    paymentMethod: updatedOrder.paymentMethod,
-  };
+  const oldOrder = orderDB[updatedOrder.index];
+
+  orderDB[updatedOrder.index] = new Order(
+    updatedOrder.customerName || oldOrder.customerName,
+    updatedOrder.customerEmail || oldOrder.customerEmail,
+    updatedOrder.orderDate || oldOrder.orderDate,
+    updatedOrder.orderTime || oldOrder.orderTime,
+    updatedOrder.orderStatus || oldOrder.orderStatus,
+    updatedOrder.orderedItems || oldOrder.orderedItems,
+    updatedOrder.paymentMethod || oldOrder.paymentMethod
+  );
 
   return true;
 };
 
 const deleteOrder = (i) => orderDB.splice(i, 1);
+
 const getOrders = () => orderDB;
+
 const getOrderByIndex = (i) => orderDB[i];
 
 const getOrderBySearchInput = (input) => {
   const orders = getOrders();
+
   if (!input) return orders;
 
   const query = input.toString().toLowerCase().trim();
+
   return orders.filter(
     (order) =>
       (order.customerName &&
