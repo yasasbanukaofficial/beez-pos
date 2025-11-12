@@ -119,14 +119,14 @@ onClick("#saveItemBtn", function () {
   // Validation
   if (!name) return displayToast("error", "Please fill out the name field");
 
-  if (!price || isNaN(priceAsNum) || priceAsNum <= 0 || priceAsNum > 10_000_000)
-    return displayToast("error", "Please fill out the price field properly");
+  if (!availability)
+    return displayToast("error", "Please fill out the status field properly");
 
   if (!qty || isNaN(qtyAsNum) || qtyAsNum <= 0 || qtyAsNum > 1000)
     return displayToast("error", "Please fill out the quantity field properly");
 
-  if (!availability)
-    return displayToast("error", "Please fill out the status field properly");
+  if (!price || isNaN(priceAsNum) || priceAsNum <= 0 || priceAsNum > 10_000_000)
+    return displayToast("error", "Please fill out the price field properly");
 
   const updatedItem = {
     index: itemIndex,
@@ -138,14 +138,14 @@ onClick("#saveItemBtn", function () {
   };
 
   if (!getItemByIndex(updatedItem.index)) {
-    saveItem(updateItem)
+    saveItem(updatedItem)
       ? displayToast("success", "Added new item!")
       : displayToast("error", "Failed to add new item!");
   } else if (updateItem(updatedItem)) {
     displayToast("success", "Updated item successfully!");
-    displayItemCard();
-    $("#itemFormModal").modal("hide");
   }
+  displayItemCard();
+  $("#itemFormModal").modal("hide");
 });
 
 onClick("#deleteItemBtn", function () {

@@ -24,27 +24,45 @@
   ></div>
   <div class="px-2 px-lg-0 d-flex flex-column gap-4">
     <div
-      class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3 pe-lg-4"
+      class="d-flex flex-column flex-md-row justify-content-between align-items-md-center align-items-start gap-3 mb-3 pe-lg-4"
     >
       <p class="fs-5 fw-bold mb-0">All Items</p>
 
-      <div class="position-relative w-50" style="max-width: 300px">
-        <input
-          type="text"
-          class="form-control bg-dark text-white rounded-3 ps-3 pe-5 py-3 border-0"
-          placeholder="Search items"
-          aria-label="Search items"
-          id="searchInput"
-        />
-        <button
-          class="position-absolute top-50 end-0 translate-middle-y me-1 border-0 bg-dark"
-          type="button"
-        >
-          <i
-            class="fa-solid fa-magnifying-glass px-2"
-            style="background-color: transparent; color: #3d4142"
-          ></i>
-        </button>
+      <div
+        class="d-flex flex-row-reverse flex-md-row gap-3 align-items-center w-50"
+        style="max-width: 300px"
+      >
+        <div class="rounded-pill border border-white p-1 d-inline-block">
+          <button
+            class="rounded-pill d-flex justify-content-center align-items-center"
+            style="width: 40px; height: 40px; background-color: #cfdddb"
+            id="addItem"
+            data-bs-toggle="modal"
+            data-bs-target="#itemFormModal"
+            data-action="add"
+          >
+            <i class="fa-solid fa-plus text-dark"></i>
+          </button>
+        </div>
+
+        <div class="position-relative">
+          <input
+            type="text"
+            class="form-control bg-dark text-white rounded-3 ps-3 pe-5 py-3 border-0"
+            placeholder="Search items"
+            aria-label="Search items"
+            id="searchInput"
+          />
+          <button
+            class="position-absolute top-50 end-0 translate-middle-y me-1 border-0 bg-dark"
+            type="button"
+          >
+            <i
+              class="fa-solid fa-magnifying-glass px-2"
+              style="background-color: transparent; color: #3d4142"
+            ></i>
+          </button>
+        </div>
       </div>
     </div>
     <!-- Item Cards -->
@@ -201,6 +219,7 @@
                 class="form-control text-white rounded-3 py-3 px-3 small border-0"
                 style="background-color: #3d4142"
                 id="itemName"
+                placeholder="ABC Phone"
               />
             </div>
 
@@ -215,7 +234,7 @@
                 class="form-control text-white rounded-3 py-3 px-3 small border-0"
                 style="background-color: #3d4142"
                 id="itemStatus"
-                value="0"
+                placeholder="Not Active"
               />
             </div>
 
@@ -223,14 +242,14 @@
               <label
                 for="itemQty"
                 class="form-label fw-semibold text-body-secondary small mb-2"
-                >Piece / Item / Quantity</label
+                >Piece / Quantity</label
               >
               <input
                 type="number"
                 class="form-control text-white rounded-3 py-3 px-3 small border-0"
                 style="background-color: #3d4142"
                 id="itemQty"
-                value="0"
+                placeholder="0"
               />
             </div>
 
@@ -245,7 +264,7 @@
                 class="form-control text-white rounded-3 py-3 px-3 small border-0"
                 style="background-color: #3d4142"
                 id="itemPrice"
-                value="$600"
+                placeholder="600"
               />
             </div>
           </form>
