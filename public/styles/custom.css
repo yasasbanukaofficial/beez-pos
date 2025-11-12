@@ -52,6 +52,11 @@ p {
   flex-shrink: 0;
 }
 
+#orderCardWrapper > div {
+  width: clamp(13rem, 40vw, 27rem);
+  flex-shrink: 0;
+}
+
 @media all and (min-width: 1024px) {
   .navbar {
     height: 100vh;
