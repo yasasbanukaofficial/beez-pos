@@ -41,7 +41,7 @@ p {
 }
 
 #itemCardWrapper > div {
-  width: clamp(10rem, 40vw, 27rem);
+  width: clamp(13rem, 40vw, 27rem);
   height: clamp(11rem, 18vw, 8rem);
   flex-shrink: 0;
 }

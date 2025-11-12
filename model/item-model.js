@@ -38,6 +38,18 @@ const getItemByName = (name) => {
   return getItems().find((item) => item.name === name);
 };
 
+const getItemBySearchInput = (name) => {
+  const items = getItems();
+
+  if (!name) return items;
+
+  const query = name.toString().toLowerCase().trim();
+
+  return items.filter(
+    (item) => item.name && item.name.toLowerCase().includes(query)
+  );
+};
+
 export {
   saveItem,
   updateItem,
@@ -45,4 +57,5 @@ export {
   getItems,
   getItemByIndex,
   getItemByName,
+  getItemBySearchInput,
 };

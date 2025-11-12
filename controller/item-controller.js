@@ -2,12 +2,12 @@ import { categoriesList } from "../db/db.js";
 import {
   deleteItem,
   getItemByIndex,
-  getItemByName,
+  getItemBySearchInput,
   getItems,
   saveItem,
   updateItem,
 } from "../model/item-model.js";
-import { onClick } from "../utils/event-helper.js";
+import { onClick, onkeyDown } from "../utils/event-helper.js";
 import { displayToast } from "../utils/toast.js";
 
 let currentEditingIndex = null;
@@ -157,5 +157,21 @@ onClick("#deleteItemBtn", function () {
     $("#itemFormModal").modal("hide");
   }
 });
+
+onkeyDown("#searchInput", (e) => {
+  const value = $("#searchInput").val();
+  if (e.key === "Backspace" || !value) {
+    displayItemCard();
+  } else {
+    const rslt = searchItem(value);
+    rslt.forEach((item, index) => {
+      $("#itemCardWrapper").html(getItemCard(item, index));
+    });
+  }
+});
+
+const searchItem = (value) => {
+  return getItemBySearchInput(value);
+};
 
 export { displayCategoryCard, displayItemCard };
