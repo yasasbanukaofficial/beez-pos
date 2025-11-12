@@ -36,13 +36,12 @@ p {
 }
 
 #categoryCardWrapper > div {
-  width: clamp(8rem, 22vw, 11rem);
-  height: clamp(6rem, 18vw, 8rem);
+  width: clamp(15rem, 25vw, 19rem);
   flex-shrink: 0;
 }
 
 #itemCardWrapper > div {
-  width: clamp(10rem, 50vw, 16rem);
+  width: clamp(10rem, 40vw, 27rem);
   height: clamp(11rem, 18vw, 8rem);
   flex-shrink: 0;
 }
