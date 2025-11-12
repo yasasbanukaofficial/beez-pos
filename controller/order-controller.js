@@ -6,11 +6,8 @@ import {
   saveOrder,
   updateOrder,
 } from "../model/order-model.js";
-import {
-  getCustomers,
-  saveCustomer,
-  getItems,
-} from "../mock-data/mock-data.js";
+import { getCustomers, saveCustomer } from "../model/customer-model.js";
+import { getItems } from "../model/item-model.js";
 import { onClick, onkeyDown } from "../utils/event-helper.js";
 import { displayToast } from "../utils/toast.js";
 import { OrderDTO } from "../dto/order-dto.js";
@@ -120,6 +117,9 @@ const updateItemDropdown = () => {
   itemMenu.empty();
   const items = getItems();
   items.forEach((item) => {
+    // FIX applied in previous steps: Defensive check for item.price display
+    const formattedPrice = item.price ? item.price.toFixed(2) : "0.00";
+
     const isAdded = currentOrderItems.some(
       (orderItem) => orderItem.name === item.name
     );
@@ -130,7 +130,7 @@ const updateItemDropdown = () => {
     }" data-item-stock="${item.stock}">
         <div class="d-flex flex-column">
           <div class="fw-semibold">${item.name}</div>
-          <div class="small text-muted">$${item.price.toFixed(2)}</div>
+          <div class="small text-muted">$${formattedPrice}</div>
         </div>
         <div class="d-flex align-items-center gap-2">
           <div class="small text-muted">Stock: ${item.stock}</div>
@@ -207,7 +207,6 @@ const setPaymentMethod = (methodName) => {
 };
 
 const loadOrderDetailsModal = (order) => {
-  isEditMode = !!order;
   currentOrderItems = order ? [...order.orderedItems] : [];
   currentEditingIndex = order ? getOrders().indexOf(order) : null;
   const customers = getCustomers();
@@ -216,8 +215,11 @@ const loadOrderDetailsModal = (order) => {
   $("#customerSelect").html(
     customers
       .map(
-        (c) =>
-          `<option value="${c.id}" data-email="${c.email}">${c.name}</option>`
+        // Use index as a fallback value if customer DTO doesn't have an 'id'
+        (c, idx) =>
+          `<option value="${c.id || idx}" data-email="${c.email}">${
+            c.name
+          }</option>`
       )
       .join("")
   );
@@ -233,6 +235,9 @@ const loadOrderDetailsModal = (order) => {
 
   // Update Modal Header and State
   if (order) {
+    // EXISTING ORDER: Start in View Mode (isEditMode = false)
+    isEditMode = false;
+
     const selectedCustomer =
       customers.find((c) => c.name === order.customerName) || customers[0];
 
@@ -244,28 +249,50 @@ const loadOrderDetailsModal = (order) => {
         order.customerName
       }</span><div class="small text-muted">${order.customerEmail || ""}</div>`
     );
+    // Use the ID or index for setting the value
     $("#customerSelect")
-      .val(selectedCustomer ? selectedCustomer.id : customers[0].id)
-      .prop("disabled", !isEditMode);
-    $("#orderStatusSelect")
-      .val(order.orderStatus)
-      .prop("disabled", !isEditMode);
+      .val(
+        selectedCustomer
+          ? selectedCustomer.id || customers.indexOf(selectedCustomer)
+          : customers[0]?.id || 0
+      )
+      .prop("disabled", true);
+    $("#orderStatusSelect").val(order.orderStatus).prop("disabled", true);
     setPaymentMethod(order.paymentMethod || "Wallet");
-    $("#saveOrderBtn").text("Update Order");
-    $("#editOrderBtn").removeClass("d-none");
+    $("#saveOrderBtn").text("Update Order").prop("disabled", true);
+    $("#editOrderBtn")
+      .removeClass("d-none")
+      .find("i")
+      .removeClass("fa-check")
+      .addClass("fa-pen");
   } else {
-    // New Order State
+    // NEW ORDER: Start in Edit Mode (isEditMode = true) - FIX 3
+    isEditMode = true;
+
     $("#orderDetailsModalLabel").text("New Order");
-    $("#modalCustomerName").html(`Select Customer to begin`);
-    $("#customerSelect").prop("disabled", false).val(customers[0].id);
+
+    // Select the first customer automatically (FIX 2)
+    const firstCustomer = customers[0];
+    const firstCustomerValue = firstCustomer ? firstCustomer.id || 0 : "";
+    const firstCustomerName = firstCustomer
+      ? firstCustomer.name
+      : "Select Customer to begin";
+    const firstCustomerEmail = firstCustomer ? firstCustomer.email : "";
+
+    $("#customerSelect").prop("disabled", false).val(firstCustomerValue);
+
+    $("#modalCustomerName").html(`
+        <span id="modalCustomerNameText">${firstCustomerName}</span>
+        <div class="small text-muted">${firstCustomerEmail}</div>
+    `);
+
     $("#orderStatusSelect").val("In Process").prop("disabled", false);
     setPaymentMethod("Wallet");
-    $("#saveOrderBtn").text("Save New Order");
+    $("#saveOrderBtn").text("Save New Order").prop("disabled", false);
     $("#editOrderBtn").addClass("d-none");
   }
 
-  // Disable inputs if not in edit mode
-  const disabledAttr = isEditMode ? "" : "disabled";
+  // Set the disabled property based on the current isEditMode state
   $(
     "#customerSelect, #orderStatusSelect, #itemDropdownButton, #addCustomerBtn"
   ).prop("disabled", !isEditMode);
@@ -277,12 +304,16 @@ const loadOrderDetailsModal = (order) => {
 
 const handleSaveOrder = () => {
   const customerId = $("#customerSelect").val();
-  const selectedCustomer = getCustomers().find((c) => c.id == customerId);
+  // Find customer by ID (or index if ID is not available)
+  const selectedCustomer = getCustomers().find(
+    (c, index) => c.id == customerId || index == customerId
+  );
   const status = $("#orderStatusSelect").val();
   const paymentMethod = $("#paymentMethodWrapper .payment-btn.active").data(
     "method"
   );
 
+  // Validation: This is why setting a default selection in loadOrderDetailsModal is crucial (FIX 2)
   if (!selectedCustomer) {
     displayToast("error", "Please select a customer.");
     return;
@@ -389,10 +420,15 @@ onClick(".delete-order-btn", function (e) {
 });
 
 onClick("#itemDropdownMenu .add-item-btn", function (e) {
-  e.preventDefault();
+  e.stopPropagation();
+
   const row = $(this).closest(".item-select-row");
   const name = row.data("item-name");
-  const price = parseFloat(row.data("item-price"));
+
+  // FIX 1: Retrieve data attribute string and use parseFloat with a 0 fallback to prevent NaN
+  const priceString = row.data("item-price");
+  const price = parseFloat(priceString) || 0;
+
   const stock = parseInt(row.data("item-stock"));
 
   if (stock <= 0) {
@@ -448,12 +484,16 @@ onClick("#saveCustomerBtn", function () {
     $("#customerSelect").html(
       customers
         .map(
-          (c) =>
-            `<option value="${c.id}" data-email="${c.email}">${c.name}</option>`
+          (c, idx) =>
+            `<option value="${c.id || idx}" data-email="${c.email}">${
+              c.name
+            }</option>`
         )
         .join("")
     );
-    $("#customerSelect").val(customers[customers.length - 1].id);
+    // Select the newly added customer
+    const lastCustomer = customers[customers.length - 1];
+    $("#customerSelect").val(lastCustomer.id || customers.length - 1);
 
     // Ensure the main order modal is still open
     $("#orderDetailsModal").modal("show");
