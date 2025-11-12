@@ -5,6 +5,20 @@ const saveItem = (name, category, itemQty, itemPrice, productStatus) => {
   itemDB.push(new Item(name, category, itemQty, itemPrice, productStatus));
 };
 
+const updateItem = (updatedItem) => {
+  if (updatedItem.index < 0 || updatedItem.index >= itemDB.length) return false;
+
+  itemDB[updatedItem.index] = {
+    name: updatedItem.name,
+    itemPrice: updatedItem.price,
+    itemQty: updatedItem.qty,
+    availability: updatedItem.availability,
+    category: updatedItem.category,
+  };
+
+  return true;
+};
+
 const deleteItem = (i) => itemDB.splice(i, 1);
 
 const getItems = () => itemDB;
@@ -15,4 +29,11 @@ const getItemByName = (name) => {
   return getItems().find((item) => item.name === name);
 };
 
-export { saveItem, deleteItem, getItems, getItemByIndex, getItemByName };
+export {
+  saveItem,
+  updateItem,
+  deleteItem,
+  getItems,
+  getItemByIndex,
+  getItemByName,
+};

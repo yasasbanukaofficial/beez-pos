@@ -10,10 +10,7 @@ const itemList = [
   new Item("Mechanical Keyboard", "Other", 35, 129.99, "In Stock"),
   new Item("Samsung Galaxy S25 Ultra", "Mobile", 1, 299.0, "In Stock"),
   new Item("Lenovo Legion i7", "Laptop", 12, 299.0, "Low Stock"),
-  new Item("Mechanical Keyboard", "Other", 35, 129.99, "In Stock"),
   new Item("Samsung Galaxy S25 Ultra", "Mobile", 1, 299.0, "In Stock"),
-  new Item("Lenovo Legion i7", "Laptop", 12, 299.0, "Low Stock"),
-  new Item("Lenovo Legion i7", "Laptop", 12, 299.0, "Low Stock"),
 ];
 
 const categoriesList = [

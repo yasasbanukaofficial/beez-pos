@@ -1,6 +1,14 @@
 import { categoriesList } from "../db/db.js";
-import { getItemByName, getItems } from "../model/item-model.js";
+import {
+  getItemByIndex,
+  getItemByName,
+  getItems,
+  updateItem,
+} from "../model/item-model.js";
 import { onClick } from "../utils/event-helper.js";
+import { displayToast } from "../utils/toast.js";
+
+let currentEditingIndex = null;
 
 const displayCategoryCard = () => {
   $("#categoryCardWrapper").empty();
@@ -12,8 +20,8 @@ const displayCategoryCard = () => {
 const displayItemCard = () => {
   $("#itemCardWrapper").empty();
   const items = getItems();
-  items.forEach((item) => {
-    $("#itemCardWrapper").append(getItemCard(item));
+  items.forEach((item, index) => {
+    $("#itemCardWrapper").append(getItemCard(item, index));
   });
 };
 
@@ -36,11 +44,11 @@ const getCategoryCard = (category) => {
     `;
 };
 
-const getItemCard = (item) => {
+const getItemCard = (item, index) => {
   return `
     <div class="row row-cols-1 g-2">
         <div class="col g-3">
-            <div class="card bg-dark text-light border-0 rounded-3 shadow-sm h-100 item-card" data-bs-toggle="modal" data-bs-target="#itemFormModal" data-item-name="${item.name}">
+            <div class="card bg-dark text-light border-0 rounded-3 shadow-sm h-100 item-card" data-bs-toggle="modal" data-bs-target="#itemFormModal" data-item-index="${index}" data-item-name="${item.name}">
                 <div class="border-3 rounded-top" style="border-top: 1px solid #C9CAEE;"></div>
                 <div class="card-body p-3">
                     <div class="mb-2">
@@ -69,9 +77,10 @@ const getItemCard = (item) => {
 
 onClick(".item-card", function () {
   const itemName = $(this).data("item-name");
-  const item = getItemByName(itemName);
-  console.log(item);
+  const itemIndex = $(this).data("item-index");
+  currentEditingIndex = itemIndex;
 
+  const item = getItemByIndex(itemIndex);
   const modal = $("#itemFormModal");
 
   modal.find("#itemName").val(item.name);
@@ -82,6 +91,57 @@ onClick(".item-card", function () {
   const categoryId = `#cat-${item.category.toLowerCase()}`;
   modal.find('input[name="category"]').prop("checked", false);
   modal.find(categoryId).prop("checked", true);
+});
+
+onClick("#saveItemBtn", function () {
+  const form = $("#itemFormModal");
+
+  const itemIndex = currentEditingIndex;
+  const name = form.find("#itemName").val();
+  const price = form.find("#itemPrice").val();
+  const qty = form.find("#itemQty").val();
+  const availability = form.find("#itemStatus").val();
+
+  const categoryId = form.find('input[name="category"]:checked').attr("id");
+  const categoryMap = {
+    "cat-mobile": "Mobile",
+    "cat-laptop": "Laptop",
+    "cat-tablet": "Tablet",
+    "cat-other": "Other",
+  };
+  const category = categoryMap[categoryId] || "Other";
+
+  const priceAsNum = Number(price);
+  const qtyAsNum = Number(qty);
+
+  // Validation
+  if (!name) return displayToast("error", "Please fill out the name field");
+
+  if (!price || isNaN(priceAsNum) || priceAsNum <= 0 || priceAsNum > 10_000_000)
+    return displayToast("error", "Please fill out the price field properly");
+
+  if (!qty || isNaN(qtyAsNum) || qtyAsNum <= 0 || qtyAsNum > 1000)
+    return displayToast("error", "Please fill out the quantity field properly");
+
+  if (!availability)
+    return displayToast("error", "Please fill out the status field properly");
+
+  const updatedItem = {
+    index: itemIndex,
+    name: name,
+    price: price,
+    qty: qty,
+    availability: availability,
+    category: category,
+  };
+
+  if (!getItemByIndex(updatedItem.index)) {
+    displayToast("error", "Item doesn't exist!");
+  } else if (updateItem(updatedItem)) {
+    displayToast("success", "Item successfully updated!");
+    displayItemCard();
+    $("#itemFormModal").modal("hide");
+  }
 });
 
 export { displayCategoryCard, displayItemCard };
