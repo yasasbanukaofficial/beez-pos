@@ -23,10 +23,8 @@ const loadDashboard = () => {
   $(leftCol).removeClass("d-none");
   $(rightCol).removeClass("col-12").addClass("col-lg-10");
   loadNavbar();
-  loadView(rightCol, "./views/pages/item.html", () => {
+  loadView(rightCol, "./views/pages/dashboard.html", () => {
     displayDate();
-    displayCategoryCard();
-    displayItemCard();
   });
 };
 
