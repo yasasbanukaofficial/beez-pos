@@ -74,8 +74,8 @@ const getOrderCard = (order, index) => {
   const dateTime = `${order.orderDate} • ${order.orderTime}`;
 
   return `
-    <div class="col-md-6 col-lg-4">
-      <div class="card bg-dark border-0 text-white rounded-3 shadow-sm p-3 order-card"
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card bg-dark border-0 text-white rounded-3 shadow-sm p-3 order-card w-100"
         style="background-color: #1b1d1e"
         data-order-index="${index}"
         data-bs-toggle="modal"

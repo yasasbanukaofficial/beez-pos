@@ -19,41 +19,47 @@
   </div>
 
   <!-- Filter Tabs -->
-  <div class="d-flex flex-row align-items-center gap-3 pe-3">
-    <button
-      class="btn btn-light text-dark fw-semibold px-4 py-2 rounded-3 filter-btn"
-      data-status="All"
-    >
-      All
-    </button>
-    <button
-      class="btn btn-outline-secondary text-white px-4 py-2 rounded-3 filter-btn"
-      data-status="In Process"
-    >
-      In Process
-    </button>
-    <button
-      class="btn btn-outline-secondary text-white px-4 py-2 rounded-3 filter-btn"
-      data-status="Paid"
-    >
-      Completed
-    </button>
-    <button
-      class="btn btn-outline-secondary text-white px-4 py-2 rounded-3 filter-btn"
-      data-status="Not Paid"
-    >
-      Cancelled
-    </button>
-
-    <div class="ms-auto d-flex flex-row align-items-center gap-3">
+  <div
+    class="d-flex flex-md-row flex-column align-items-md-center align-items-start gap-3 pe-3"
+  >
+    <div class="d-md-flex text-center gap-2 overflow-x-auto d-none">
       <button
-        class="btn rounded-pill fw-semibold px-4 py-2 text-dark border-0"
+        class="btn btn-light text-dark fw-semibold px-4 py-2 rounded-3 filter-btn"
+        data-status="All"
+      >
+        All
+      </button>
+      <button
+        class="btn btn-outline-secondary text-white px-4 py-2 rounded-3 filter-btn"
+        data-status="In Process"
+      >
+        In Process
+      </button>
+      <button
+        class="btn btn-outline-secondary text-white px-4 py-2 rounded-3 filter-btn"
+        data-status="Paid"
+      >
+        Completed
+      </button>
+      <button
+        class="btn btn-outline-secondary text-white px-4 py-2 rounded-3 filter-btn"
+        data-status="Not Paid"
+      >
+        Cancelled
+      </button>
+    </div>
+
+    <div
+      class="ms-md-auto d-flex flex-md-row flex-row-reverse align-items-center gap-3"
+    >
+      <button
+        class="btn rounded-pill fw-semibold px-4 py-2 text-dark border-0 w-50"
         style="background-color: #c9caee"
         id="addOrderBtn"
         data-bs-toggle="modal"
         data-bs-target="#orderDetailsModal"
       >
-        Add an Order
+        Add Order
       </button>
 
       <div class="position-relative">
@@ -78,7 +84,7 @@
   </div>
 
   <!-- Order Cards -->
-  <div class="row g-4 pe-lg-4" id="orderCardWrapper"></div>
+  <div class="row g-4 pe-lg-4 pb-5" id="orderCardWrapper"></div>
 
   <!-- MODERN ORDER DETAILS MODAL -->
   <div

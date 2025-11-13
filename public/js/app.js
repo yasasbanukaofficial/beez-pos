@@ -6,6 +6,7 @@ import {
   displayCategoryCard,
   displayItemCard,
 } from "../../controller/item-controller.js";
+import { displayOrderCard } from "../../controller/order-controller.js";
 
 // Variables
 const leftCol = "#leftCol";
@@ -23,8 +24,9 @@ const loadDashboard = () => {
   $(leftCol).removeClass("d-none");
   $(rightCol).removeClass("col-12").addClass("col-lg-10");
   loadNavbar();
-  loadView(rightCol, "./views/pages/dashboard.html", () => {
+  loadView(rightCol, "./views/pages/checkout.html", () => {
     displayDate();
+    displayOrderCard();
   });
 };
 

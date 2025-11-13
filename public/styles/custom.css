@@ -53,7 +53,7 @@ p {
 }
 
 #orderCardWrapper > div {
-  width: clamp(13rem, 40vw, 27rem);
+  width: clamp(24rem, 40vw, 27rem);
   flex-shrink: 0;
 }
 
