@@ -26,7 +26,7 @@ const orderList = [
   new Order(
     "Itadori Yuji",
     "yuji@tech.com",
-    "Wednesday, 28, 2025",
+    "Nov 14, 2025",
     "4:48 PM",
     "Paid",
     [
@@ -37,7 +37,7 @@ const orderList = [
   new Order(
     "Gojo Satoru",
     "blue.eyes@work.net",
-    "Monday, 26, 2025",
+    "Nov 14, 2025",
     "10:15 AM",
     "In Process",
     [
@@ -48,7 +48,7 @@ const orderList = [
   new Order(
     "Yasas Banuka",
     "yasas@banu.com",
-    "Tuesday, 27, 2025",
+    "Nov 14, 2025",
     "2:30 PM",
     "Not Paid",
     [{ name: "Lenovo Legion i7", qty: 1, price: 299.0 }]
