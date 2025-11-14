@@ -47,13 +47,13 @@ p {
 }
 
 #itemCardWrapper > div {
-  width: clamp(13rem, 40vw, 27rem);
+  width: clamp(18rem, 40vw, 28rem);
   height: clamp(11rem, 18vw, 8rem);
   flex-shrink: 0;
 }
 
 #customerCardWrapper > div {
-  width: clamp(13rem, 40vw, 27rem);
+  width: clamp(18rem, 40vw, 28rem);
   height: clamp(11rem, 18vw, 8rem);
   flex-shrink: 0;
 }
@@ -63,24 +63,21 @@ p {
   flex-shrink: 0;
 }
 
-/* Scrollbar width */
+/* Scrollbar CSS */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
-/* Scrollbar track */
 ::-webkit-scrollbar-track {
-  background: #000; /* Black track */
+  background: #000;
 }
 
-/* Scrollbar handle */
 ::-webkit-scrollbar-thumb {
-  background: #000; /* Black handle */
+  background: #000;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #333; /* Slightly lighter hover */
+  background: #333;
 }
 
 @media all and (min-width: 1024px) {
