@@ -6,6 +6,7 @@ import {
   displayCategoryCard,
   displayItemCard,
 } from "../../controller/item-controller.js";
+import { renderDashboard } from "../../controller/dashboard-controller.js";
 
 // Variables
 const leftCol = "#leftCol";
@@ -25,6 +26,7 @@ const loadDashboard = () => {
   loadNavbar();
   loadView(rightCol, "./views/pages/dashboard.html", () => {
     displayDate();
+    renderDashboard();
   });
 };
 

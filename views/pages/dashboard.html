@@ -25,13 +25,12 @@
         class="p-4 rounded-4 shadow-lg d-flex flex-column"
         style="background-color: #5b5eeb"
       >
-        <!-- Icon: High contrast against the accent color -->
         <i
           class="fa-solid fa-money-bill-trend-up fa-xl mb-3 p-2 rounded-2"
           style="background-color: rgba(255, 255, 255, 0.2)"
         ></i>
         <p class="fw-semibold mb-1 small">Revenue</p>
-        <h2 class="fw-bold mb-0 fs-2">$1200.56</h2>
+        <h2 id="revenueValue" class="fw-bold mb-0 fs-2">$0.00</h2>
       </div>
     </div>
 
@@ -41,29 +40,27 @@
         class="p-4 rounded-4 shadow-lg d-flex flex-column"
         style="background-color: #2c2d30"
       >
-        <!-- Icon: Subtle background to match other dark items -->
         <i
           class="fa-solid fa-receipt fa-xl mb-3 p-2 rounded-2"
           style="color: #c9caee; background-color: #3d4142"
         ></i>
         <p class="fw-semibold mb-1 small text-muted">Paid Orders</p>
-        <h2 class="fw-bold mb-0 fs-2">198</h2>
+        <h2 id="paidOrdersValue" class="fw-bold mb-0 fs-2">0</h2>
       </div>
     </div>
 
-    <!-- Card 3: Returned Orders -->
+    <!-- Card 3: Cancelled / Not Paid Orders -->
     <div class="col-12 col-sm-6 col-lg-3">
       <div
         class="p-4 rounded-4 shadow-lg d-flex flex-column"
         style="background-color: #2c2d30"
       >
-        <!-- Icon: Warning/Alert color for returns -->
         <i
-          class="fa-solid fa-arrow-right-from-bracket fa-xl mb-3 p-2 rounded-2"
+          class="fa-solid fa-ban fa-xl mb-3 p-2 rounded-2"
           style="color: #f0c8cf; background-color: #3d4142"
         ></i>
-        <p class="fw-semibold mb-1 small text-muted">Returned Orders</p>
-        <h2 class="fw-bold mb-0 fs-2">12</h2>
+        <p class="fw-semibold mb-1 small text-muted">Cancelled / Not Paid</p>
+        <h2 id="cancelledOrdersValue" class="fw-bold mb-0 fs-2">0</h2>
       </div>
     </div>
 
@@ -73,13 +70,12 @@
         class="p-4 rounded-4 shadow-lg d-flex flex-column"
         style="background-color: #2c2d30"
       >
-        <!-- Icon: Inventory/Stock related icon -->
         <i
           class="fa-solid fa-boxes-stacked fa-xl mb-3 p-2 rounded-2"
           style="color: #a0f5c8; background-color: #3d4142"
         ></i>
         <p class="fw-semibold mb-1 small text-muted">Items Sold</p>
-        <h2 class="fw-bold mb-0 fs-2">227</h2>
+        <h2 id="itemsSoldValue" class="fw-bold mb-0 fs-2">0</h2>
       </div>
     </div>
   </div>
@@ -99,68 +95,14 @@
           <a href="#" class="text-muted text-decoration-none small">See All</a>
         </div>
 
-        <div class="d-flex flex-column gap-3">
-          <!-- Item 1: Laptop -->
-          <div
-            class="d-flex flex-row justify-content-between align-items-center p-3 rounded-3"
-            style="background-color: #3d4142"
-          >
-            <div class="d-flex flex-row align-items-center gap-3">
-              <i class="fa-solid fa-laptop fa-lg" style="color: #bcbcff"></i>
-              <span class="fw-semibold">Laptop</span>
-            </div>
-            <span class="text-muted small">Order: 150</span>
-          </div>
-
-          <!-- Item 2: Mobile -->
-          <div
-            class="d-flex flex-row justify-content-between align-items-center p-3 rounded-3"
-            style="background-color: #3d4142"
-          >
-            <div class="d-flex flex-row align-items-center gap-3">
-              <i
-                class="fa-solid fa-mobile-screen fa-lg"
-                style="color: #a0f5c8"
-              ></i>
-              <span class="fw-semibold">Mobile</span>
-            </div>
-            <span class="text-muted small">Order: 134</span>
-          </div>
-
-          <!-- Item 3: Headphones -->
-          <div
-            class="d-flex flex-row justify-content-between align-items-center p-3 rounded-3"
-            style="background-color: #3d4142"
-          >
-            <div class="d-flex flex-row align-items-center gap-3">
-              <i
-                class="fa-solid fa-headphones fa-lg"
-                style="color: #fac1d9"
-              ></i>
-              <span class="fw-semibold">Headphones</span>
-            </div>
-            <span class="text-muted small">Order: 98</span>
-          </div>
-
-          <!-- Item 4: Tablet -->
-          <div
-            class="d-flex flex-row justify-content-between align-items-center p-3 rounded-3"
-            style="background-color: #3d4142"
-          >
-            <div class="d-flex flex-row align-items-center gap-3">
-              <i
-                class="fa-solid fa-tablet-screen-button fa-lg"
-                style="color: #c2dbe9"
-              ></i>
-              <span class="fw-semibold">Tablet</span>
-            </div>
-            <span class="text-muted small">Order: 82</span>
-          </div>
+        <div id="topSellingList" class="d-flex flex-column gap-3">
+          <!-- Top selling items will be injected here -->
+          <div class="text-muted small">Loading...</div>
         </div>
       </div>
     </div>
 
-    <!-- Right Column: Sales Overview (Chart Placeholder) -->
+    <!-- Right Column: Sales Overview (Now modern text cards) -->
     <div class="col-lg-7">
       <div
         class="rounded-4 p-4 h-100 d-flex flex-column shadow-lg"
@@ -171,6 +113,7 @@
         >
           <p class="fw-bold fs-5 mb-0">Sales Overview</p>
           <select
+            id="overviewRange"
             class="form-select bg-dark text-white border-0 w-auto rounded-3"
             style="font-size: 0.9rem"
           >
@@ -180,11 +123,77 @@
           </select>
         </div>
 
-        <div
-          class="flex-grow-1 rounded-3 d-flex align-items-center justify-content-center text-muted p-4"
-          style="background-color: #3d4142; min-height: 250px"
-        >
-          <p class="small mb-0">Sales chart will be displayed here</p>
+        <div id="salesOverviewGrid" class="row g-3">
+          <div class="col-12 col-md-6">
+            <div
+              class="p-3 rounded-3 d-flex align-items-center"
+              style="background-color: #3d4142"
+            >
+              <i
+                class="fa-solid fa-chart-line fa-2x me-3"
+                style="color: #bcbcff"
+              ></i>
+              <div>
+                <div class="small text-muted">Total Revenue</div>
+                <div id="overviewTotalRevenue" class="fw-bold fs-5">$0.00</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div
+              class="p-3 rounded-3 d-flex align-items-center"
+              style="background-color: #3d4142"
+            >
+              <i
+                class="fa-solid fa-calendar-day fa-2x me-3"
+                style="color: #a0f5c8"
+              ></i>
+              <div>
+                <div class="small text-muted">Today's Revenue</div>
+                <div id="overviewTodayRevenue" class="fw-bold fs-5">$0.00</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div
+              class="p-3 rounded-3 d-flex align-items-center"
+              style="background-color: #3d4142"
+            >
+              <i
+                class="fa-solid fa-hourglass-half fa-2x me-3"
+                style="color: #f0c8cf"
+              ></i>
+              <div>
+                <div class="small text-muted">Pending / In Process</div>
+                <div id="overviewPending" class="fw-bold fs-5">$0.00</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div
+              class="p-3 rounded-3 d-flex align-items-center"
+              style="background-color: #3d4142"
+            >
+              <i
+                class="fa-solid fa-bell-slash fa-2x me-3"
+                style="color: #fac1d9"
+              ></i>
+              <div>
+                <div class="small text-muted">Current Losses (Not Paid)</div>
+                <div id="overviewLosses" class="fw-bold fs-5">$0.00</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="small text-muted">
+              Tip: 'Current Losses' shows total value of orders marked 'Not
+              Paid' (treated as cancelled/unpaid).
+            </div>
+          </div>
         </div>
       </div>
     </div>

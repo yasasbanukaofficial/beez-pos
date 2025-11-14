@@ -1,4 +1,5 @@
 import { displayCustomerCard } from "../../controller/customer-controller.js";
+import { renderDashboard } from "../../controller/dashboard-controller.js";
 import {
   displayCategoryCard,
   displayItemCard,
@@ -10,7 +11,10 @@ import loadView from "../../utils/loader.js";
 
 onClick(".dashboardBtn", () => {
   changeBtnClasses(".dashboardBtn");
-  loadView("#rightCol", "./views/pages/dashboard.html", displayDate);
+  loadView("#rightCol", "./views/pages/dashboard.html", () => {
+    displayDate();
+    renderDashboard();
+  });
 });
 
 onClick(".customerBtn", () => {
