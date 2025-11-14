@@ -27,6 +27,7 @@ const loadDashboard = () => {
   loadView(rightCol, "./views/pages/dashboard.html", () => {
     displayDate();
     renderDashboard();
+    displayUserName();
   });
 };
 
@@ -40,3 +41,10 @@ loadPage();
 $(document).on("user:loggedIn", () => {
   loadDashboard();
 });
+
+const displayUserName = () => {
+  const loggedUserName = sessionController.getSessionItem("username");
+  $(".logged-user-name").text(loggedUserName);
+  $(".username-f-letter").text(loggedUserName.charAt(0));
+  console.log(loggedUserName);
+};

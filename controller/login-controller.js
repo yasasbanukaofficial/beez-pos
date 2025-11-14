@@ -139,6 +139,7 @@ function handlePinEntry() {
     if (isValid) {
       $("#pinModal").modal("hide");
       sessionController.saveSessionItem("loggedIn", "true");
+      sessionController.saveSessionItem("username", username);
       $(document).trigger("user:loggedIn");
     } else {
       pinInput.clear();
