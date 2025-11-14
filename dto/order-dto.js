@@ -6,7 +6,7 @@ export class OrderDTO {
   #orderTime;
   #orderStatus; // paid, in process, not paid
   #orderedItems; // [{ name: "Macbook", qty: 1, price: 600 }, ...]
-  #paymentMethod; // Cash, Debit, Wallet
+  #paymentMethod; // Cash, Card, Wallet
 
   // Constructor
   constructor(
