@@ -4,6 +4,12 @@
   font-family: "Inter", sans-serif;
 }
 
+/* Firefox Scroll Bar*/
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #000 #000;
+}
+
 /* Navbar Custom Styles */
 .navbar button:focus,
 .active {
@@ -55,6 +61,26 @@ p {
 #orderCardWrapper > div {
   width: clamp(24rem, 40vw, 27rem);
   flex-shrink: 0;
+}
+
+/* Scrollbar width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Scrollbar track */
+::-webkit-scrollbar-track {
+  background: #000; /* Black track */
+}
+
+/* Scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background: #000; /* Black handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #333; /* Slightly lighter hover */
 }
 
 @media all and (min-width: 1024px) {
