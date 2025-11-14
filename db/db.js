@@ -4,8 +4,8 @@ import { CustomerDTO as Customer } from "../dto/customer-dto.js";
 import { OrderDTO as Order } from "../dto/order-dto.js";
 
 const userList = [
-  new User("Jason Doe", "jason@mail.com", "blah", "1095"),
-  new User("Mason Doe", "blue@mail.com", "blah", "1195"),
+  new User("Itadori Yuji", "yuiji@mail.com", "blah", "1095"),
+  new User("Gojo Satoru", "blueeyes@mail.com", "blah", "1195"),
 ];
 
 const itemList = [
@@ -16,16 +16,16 @@ const itemList = [
 ];
 
 const customerList = [
-  new Customer("John Doe", "john.doe@email.com", 45, "077-123-4567"),
-  new Customer("Jane Smith", "jane.smith@work.net", 22, "071-987-6543"),
-  new Customer("Michael Johnson", "michael.j@corp.com", 33, "075-555-1111"),
-  new Customer("Emily Davis", "emily.d@test.org", 51, "070-444-2222"),
+  new Customer("Yuji Itadori", "yuji@email.com", 20, "077-123-4567"),
+  new Customer("Yasas Banuka", "yasasbanu@banu.com", 18, "071-987-6543"),
+  new Customer("Satoru Gojo", "blue.eyes@jjk.com", 21, "075-555-1111"),
+  new Customer("Makima San", "maki@jjk.com", 21, "070-444-2222"),
 ];
 
 const orderList = [
   new Order(
-    "Yasas Banuka",
-    "yasas.b@tech.com",
+    "Itadori Yuji",
+    "yuji@tech.com",
     "Wednesday, 28, 2025",
     "4:48 PM",
     "Paid",
@@ -35,8 +35,8 @@ const orderList = [
     ]
   ),
   new Order(
-    "Jane Smith",
-    "jane.smith@work.net",
+    "Gojo Satoru",
+    "blue.eyes@work.net",
     "Monday, 26, 2025",
     "10:15 AM",
     "In Process",
@@ -46,8 +46,8 @@ const orderList = [
     ]
   ),
   new Order(
-    "Michael Johnson",
-    "michael.j@corp.com",
+    "Yasas Banuka",
+    "yasas@banu.com",
     "Tuesday, 27, 2025",
     "2:30 PM",
     "Not Paid",
